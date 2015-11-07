@@ -25,6 +25,9 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
         # convert SVG files using the default Android configuration
         svgtopng -d . -o /dev/workset/android-project/app/src/main/res --android
         
+        # you can always start it like any other java jar file
+        java -jar svgtopng
+        
 ## CLI Usage
 
         ================================================================================
