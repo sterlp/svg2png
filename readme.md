@@ -5,8 +5,8 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
 
 ## Download & Requirements
 
-[Download at bintray](https://bintray.com/puel/Releases/SvgToPng#files)
-You have to have Java 8 installed on your PC
+* [Download at bintray](https://bintray.com/puel/Releases/SvgToPng#files)
+* You have to have Java 8 installed on your PC
 
 ## CLI Samples
 
