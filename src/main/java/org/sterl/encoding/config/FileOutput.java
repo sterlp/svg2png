@@ -16,6 +16,7 @@ public class FileOutput {
     private int width = -1;
     private String directory;
     private String nameSuffix;
+    private String namePrefix;
 
     public File toOutputFile(File source, String basePath, String outName) {
         // either a set path or the one of the parent
@@ -28,17 +29,19 @@ public class FileOutput {
             path += "/" + directory;
         }
         // setting the name
-        if (outName != null) {
-            path += "/" + outName;
-        } else {
-            path += "/" + FilenameUtils.getBaseName(source.getName());
-        }
-        if (nameSuffix != null) {
-            path += nameSuffix;
-        }
-        if (!path.endsWith(".png")) {
-            path += ".png";
-        }
+        path += "/" + buildName(FilenameUtils.getBaseName(source.getName()), outName, namePrefix, nameSuffix);
+        
         return FileUtil.newFile(path);
+    }
+    
+    static String buildName(String srcName, String outName, String prefix, String suffix) {
+        String name = outName != null ? outName : srcName;
+        String result;
+        if (prefix != null && !name.startsWith(prefix)) result = prefix + name;
+        else result = name;
+        
+        if (suffix != null && !result.endsWith(suffix)) result += suffix;
+        if (!result.endsWith(".png")) result += ".png";
+        return result;
     }
 }

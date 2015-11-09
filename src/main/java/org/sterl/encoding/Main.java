@@ -58,7 +58,7 @@ public class Main {
         } else if (cfg.getInputDirectory() != null) {
             File d = FileUtil.newFile(cfg.getInputDirectory());
             if (!d.exists()) throw new IllegalArgumentException("Directory " + cfg.getInputDirectory() + " not found!");
-            if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputFile() + " is not a directory!");
+            if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputDirectory() + " is not a directory!");
         }
         
         return new SvgToPng(cfg).convert();

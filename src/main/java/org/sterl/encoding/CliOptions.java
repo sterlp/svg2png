@@ -20,7 +20,8 @@ public enum CliOptions {
     HEIGHT("h", null, true, "Height of the output file."),
     CONFIG("c", null, true, "JSON Config file for the file output."),
     
-    ANDROID(null, "android", false, "Android default config from mdpi 48x48 -> xxxhdpi 192x192."),
+    ANDROID(null, "android", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
+    ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
     ANDROID_SMALL(null, "android-small", false, "Android Small default config from mdpi 24x24 -> xxxhdpi 96x96.")
     ;
     
@@ -60,6 +61,12 @@ public enum CliOptions {
         } else if (cmd.hasOption(ANDROID_SMALL.longName)) {
             try {
                 result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-small.json"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (cmd.hasOption(ANDROID_ICON.longName)) {
+            try {
+                result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-icon.json"));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

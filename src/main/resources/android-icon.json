@@ -1,0 +1,30 @@
+{
+    "files": [
+        {
+            "directory": "drawable-xxxhdpi",
+            "namePrefix": "icon_",
+            "height": 128,
+            "width": 128
+        },{
+            "directory": "drawable-xxhdpi",
+            "namePrefix": "icon_",
+            "height": 96,
+            "width": 96
+        },{
+            "directory": "drawable-xhdpi",
+            "namePrefix": "icon_",
+            "height": 72,
+            "width": 72
+        },{
+            "directory": "drawable-hdpi",
+            "namePrefix": "icon_",
+            "height": 48,
+            "width": 48
+        },{
+            "directory": "drawable-mdpi",
+            "namePrefix": "icon_",
+            "height": 32,
+            "width": 32
+        }
+    ]
+}

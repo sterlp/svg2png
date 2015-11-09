@@ -1,16 +1,32 @@
 package org.sterl.encoding;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.sterl.encoding.config.OutputConfig;
 
 public class TestSvgToPng {
+    
+    File tmpDir;
+    
+    @Before
+    public void before() {
+        tmpDir = new File("./tmp1");
+        tmpDir.mkdirs();
+        tmpDir.deleteOnExit();
+    }
+    @After
+    public void after() throws Exception {
+        FileUtils.deleteDirectory(tmpDir);
+    }
 
     @Test
     public void testConversionOfOneFile() throws Exception {
@@ -60,40 +76,44 @@ public class TestSvgToPng {
     
     @Test
     public void testWithConfig() throws Exception {
-        File dir = new File("./tmp1");
-        dir.mkdirs();
-        dir.deleteOnExit();
         List<File> files = Main.run(new String[] {
                 "-f",
                 getClass().getResource("/sample.svg").toURI().toString(),
                 "-c",
                 getClass().getResource("/android.json").toURI().toString(),
                 "-o",
-                dir.getAbsolutePath()
+                tmpDir.getAbsolutePath()
         });
+        assertEquals(5, files.size());
         assertEndsWith(files.get(0).getAbsolutePath(), "/tmp1/drawable-xxxhdpi/sample.png");
         assertEndsWith(files.get(1).getAbsolutePath(), "/tmp1/drawable-xxhdpi/sample.png");
         assertEndsWith(files.get(2).getAbsolutePath(), "/tmp1/drawable-xhdpi/sample.png");
         assertEndsWith(files.get(3).getAbsolutePath(), "/tmp1/drawable-hdpi/sample.png");
         assertEndsWith(files.get(4).getAbsolutePath(), "/tmp1/drawable-mdpi/sample.png");
-        // clean
-        FileUtils.deleteDirectory(dir);
     }
     
     @Test
     public void testInternalConfig() throws Exception {
-        File dir = new File("./tmp2");
-        dir.mkdirs();
-        dir.deleteOnExit();
         List<File> files = Main.run(new String[] {
                 "-d",
                 new File(getClass().getResource("/sample.svg").toURI()).getParent(),
                 "-android-small",
                 "-o",
-                dir.getAbsolutePath()
+                tmpDir.getAbsolutePath()
         });
         assertEquals(10, files.size());
-        dir.delete();
+    }
+    
+    @Test
+    public void testIcon() throws Exception {
+        List<File> files = Main.run(new String[] {
+                "-d",
+                new File(getClass().getResource("/sample.svg").toURI()).getParent(),
+                "-android-icon",
+                "-o",
+                tmpDir.getAbsolutePath()
+        });
+        assertEquals(10, files.size());
     }
 
     private void assertEndsWith(String absolutePath, String value) {

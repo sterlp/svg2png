@@ -48,11 +48,21 @@ public class SvgToPng {
         PNGTranscoder t = new PNGTranscoder();
         List<File> generated = new ArrayList<>();
 
+        StringBuilder info = new StringBuilder();
         for (FileOutput out : cfg.getFiles()) {
-            if (out.getHeight() > 0) t.addTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT, new Float(out.getHeight()));
-            else t.removeTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT);
-            if (out.getWidth() > 0) t.addTranscodingHint(PNGTranscoder.KEY_MAX_WIDTH, new Float(out.getWidth()));
+            info.setLength(0);
+            info.append(input.getName());
+
+            if (out.getWidth() > 0) {
+                t.addTranscodingHint(PNGTranscoder.KEY_MAX_WIDTH, new Float(out.getWidth()));
+                info.append(" w").append(out.getWidth());
+            }
             else t.removeTranscodingHint(PNGTranscoder.KEY_MAX_WIDTH);
+            if (out.getHeight() > 0) {
+                t.addTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT, new Float(out.getHeight()));
+                info.append(" h").append(out.getHeight());
+            }
+            else t.removeTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT);
             
             File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());
             if (outputFile.exists()) {
@@ -63,8 +73,9 @@ public class SvgToPng {
             try (FileOutputStream outStram = new FileOutputStream(outputFile)) {
                 t.transcode(ti, new TranscoderOutput(outStram));
                 generated.add(outputFile);
-                System.out.println(input.getName() + " converted to " + outputFile.getAbsolutePath());
+                info.append(" ").append(outputFile.getAbsolutePath());
             }
+            System.out.println(info.toString());
         }
         return generated;
     }
