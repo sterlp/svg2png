@@ -1,8 +1,10 @@
-package org.sterl.encoding.config;
+package org.sterl.svg2png.config;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.sterl.svg2png.config.FileOutput;
+import org.sterl.svg2png.config.OutputConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

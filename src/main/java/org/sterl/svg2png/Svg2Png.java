@@ -1,4 +1,4 @@
-package org.sterl.encoding;
+package org.sterl.svg2png;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,15 +13,15 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.FileUtils;
-import org.sterl.encoding.config.FileOutput;
-import org.sterl.encoding.config.OutputConfig;
-import org.sterl.encoding.util.FileUtil;
+import org.sterl.svg2png.config.FileOutput;
+import org.sterl.svg2png.config.OutputConfig;
+import org.sterl.svg2png.util.FileUtil;
 
-public class SvgToPng {
+public class Svg2Png {
 
     private final OutputConfig outCfg;
     
-    public SvgToPng(OutputConfig outCfg) {
+    public Svg2Png(OutputConfig outCfg) {
         super();
         this.outCfg = outCfg;
     }
@@ -54,15 +54,14 @@ public class SvgToPng {
             info.append(input.getName());
 
             if (out.getWidth() > 0) {
-                t.addTranscodingHint(PNGTranscoder.KEY_MAX_WIDTH, new Float(out.getWidth()));
+                t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(out.getWidth()));
                 info.append(" w").append(out.getWidth());
-            }
-            else t.removeTranscodingHint(PNGTranscoder.KEY_MAX_WIDTH);
+            } else t.removeTranscodingHint(PNGTranscoder.KEY_WIDTH);
+
             if (out.getHeight() > 0) {
-                t.addTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT, new Float(out.getHeight()));
+                t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(out.getHeight()));
                 info.append(" h").append(out.getHeight());
-            }
-            else t.removeTranscodingHint(PNGTranscoder.KEY_MAX_HEIGHT);
+            } else t.removeTranscodingHint(PNGTranscoder.KEY_HEIGHT);
             
             File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());
             if (outputFile.exists()) {

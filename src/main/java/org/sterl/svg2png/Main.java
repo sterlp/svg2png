@@ -1,4 +1,4 @@
-package org.sterl.encoding;
+package org.sterl.svg2png;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,8 +11,8 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
-import org.sterl.encoding.config.OutputConfig;
-import org.sterl.encoding.util.FileUtil;
+import org.sterl.svg2png.config.OutputConfig;
+import org.sterl.svg2png.util.FileUtil;
 
 //https://commons.apache.org/proper/commons-cli/usage.html
 public class Main {
@@ -43,7 +43,7 @@ public class Main {
         } else if (args.length == 1) {
             cfg = OutputConfig.fromPath(args[0]);
         } else {
-            CommandLine cmd = new DefaultParser().parse( options, args);
+            CommandLine cmd = new DefaultParser().parse(options, args);
             cfg = CliOptions.parse(cmd);
         }
         
@@ -61,31 +61,31 @@ public class Main {
             if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputDirectory() + " is not a directory!");
         }
         
-        return new SvgToPng(cfg).convert();
+        return new Svg2Png(cfg).convert();
     }
     
     private static void printHelp() {
         System.out.println(StringUtils.repeat("=", 80));
         System.out.println(StringUtils.center("SVG to PNG", 80));
         System.out.println();
-        formatter.printHelp( "svgtopng", options );
+        formatter.printHelp( "svg2png", options );
         System.out.println();
         System.out.println("Examples:");
         System.out.println("---------");
         System.out.println("# just convert a file");
-        System.out.println("svgtopng foo.svg");
+        System.out.println("svg2png foo.svg");
         System.out.println("");
         System.out.println("# generate a PNG with a name");
-        System.out.println("svgtopng -f foo.svg -n bar.png");
+        System.out.println("svg2png -f foo.svg -n bar.png");
         System.out.println("");
         System.out.println("# convert all file in a directory");
-        System.out.println("svgtopng -d /Picures/icons/svg -o /Pictures/icons/png");
+        System.out.println("svg2png -d /Picures/icons/svg -o /Pictures/icons/png");
         System.out.println("");
         System.out.println("# convert with a JSON configuration");
-        System.out.println("svgtopng -d . -c my.json");
+        System.out.println("svg2png -d . -c my.json");
         System.out.println("");
         System.out.println("# convert SVG files using the default Android configuration");
-        System.out.println("svgtopng -d . -o /dev/workset/android-project/app/src/main/res --android");
+        System.out.println("svg2png -d . -o /dev/workset/android-project/app/src/main/res --android");
     }
 
 }

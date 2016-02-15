@@ -1,10 +1,10 @@
-package org.sterl.encoding.config;
+package org.sterl.svg2png.config;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.sterl.encoding.util.FileUtil;
+import org.sterl.svg2png.util.FileUtil;
 
 import lombok.Getter;
 import lombok.Setter;

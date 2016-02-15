@@ -3,8 +3,8 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.sterl.encoding-util</groupId>
-    <artifactId>encoding-util</artifactId>
+    <groupId>org.sterl.svg2png</groupId>
+    <artifactId>svg2png</artifactId>
     <packaging>jar</packaging>
     <version>0.0.1-SNAPSHOT</version>
     <url>https://github.com/puel/SvgToPng</url>
@@ -100,7 +100,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <manifestEntries>
-                                        <Main-Class>org.sterl.encoding.Main</Main-Class>
+                                        <Main-Class>org.sterl.svg2png.Main</Main-Class>
                                         <X-Compile-Source-JDK>${java.version}</X-Compile-Source-JDK>
                                         <X-Compile-Target-JDK>${java.version}</X-Compile-Target-JDK>
                                     </manifestEntries>
@@ -138,7 +138,7 @@
         
                     <!-- (optional) name for binary executable, if not set will just -->
                     <!-- make the regular jar artifact executable -->
-                    <programFile>svgtopng</programFile>
+                    <programFile>svg2png</programFile>
         
                     <!-- (optional) name for a file that will define what script 
                         gets -->

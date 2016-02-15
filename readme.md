@@ -5,36 +5,36 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
 
 ## Download & Requirements
 
-* [Download at svgtopng at bintray](https://bintray.com/puel/Releases/SvgToPng#files)
+* [Download at svg2png at bintray](https://bintray.com/puel/Releases/svg2png#files)
 * You have to have Java 8 installed on your PC
 * Sidenote: [Google Android Icons](https://www.google.com/design/icons/)
 
 ## CLI Samples
 
         # just convert a file
-        svgtopng foo.svg
+        svg2png foo.svg
         
         # generate a PNG with a name
-        svgtopng -f foo.svg -n bar.png
+        svg2png -f foo.svg -n bar.png
         
         # convert all file in a directory
-        svgtopng -d /Picures/icons/svg -o /Pictures/icons/png
+        svg2png -d /Picures/icons/svg -o /Pictures/icons/png
         
         # convert with a JSON configuration
-        svgtopng -d . -c my.json
+        svg2png -d . -c my.json
         
         # convert SVG files using the default Android configuration
-        svgtopng -d . -o /dev/workset/android-project/app/src/main/res --android
+        svg2png -d . -o /dev/workset/android-project/app/src/main/res --android
         
         # you can always start it like any other java jar file
-        java -jar svgtopng
+        java -jar svg2png
         
 ## CLI Usage
 
         ================================================================================
                                            SVG to PNG                                   
         
-        usage: svgtopng
+        usage: svg2png
             --android         Android default config from mdpi 48x48 -> xxxhdpi
                               192x192.
             --android-small   Android Small default config from mdpi 24x24 ->
@@ -48,7 +48,7 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
          -w <arg>             Width of the output file.
 
 ## JSON Android Config Sample
-        
+
         {
             "files": [
                 {

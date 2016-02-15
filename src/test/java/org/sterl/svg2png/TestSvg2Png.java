@@ -1,4 +1,4 @@
-package org.sterl.encoding;
+package org.sterl.svg2png;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,9 +11,11 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sterl.encoding.config.OutputConfig;
+import org.sterl.svg2png.Main;
+import org.sterl.svg2png.Svg2Png;
+import org.sterl.svg2png.config.OutputConfig;
 
-public class TestSvgToPng {
+public class TestSvg2Png {
     
     File tmpDir;
     
@@ -32,7 +34,7 @@ public class TestSvgToPng {
     public void testConversionOfOneFile() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/sample.svg").toURI().toString());
         
-        List<File> convert = new SvgToPng(cfg).convert();
+        List<File> convert = new Svg2Png(cfg).convert();
         System.out.println(convert);
         assertEquals(1, convert.size());
         assertTrue(convert.get(0).exists());
@@ -63,7 +65,7 @@ public class TestSvgToPng {
     public void testConversionDirectory() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());
         
-        List<File> convert = new SvgToPng(cfg).convert();
+        List<File> convert = new Svg2Png(cfg).convert();
         convert.stream().forEach(f -> {
             f.deleteOnExit();
         });

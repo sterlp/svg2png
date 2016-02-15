@@ -1,0 +1,30 @@
+{
+    "files": [
+        {
+            "name": "ic_launcher.png",
+            "directory": "mipmap-xxxhdpi",
+            "height": 192,
+            "width": 192
+        },{
+            "name": "ic_launcher.png",
+            "directory": "mipmap-xxhdpi",
+            "height": 144,
+            "width": 144
+        },{
+            "name": "ic_launcher.png",
+            "directory": "mipmap-xhdpi",
+            "height": 96,
+            "width": 96
+        },{
+            "name": "ic_launcher.png",
+            "directory": "mipmap-hdpi",
+            "height": 72,
+            "width": 72
+        },{
+            "name": "ic_launcher.png",
+            "directory": "mipmap-mdpi",
+            "height": 48,
+            "width": 48
+        }
+    ]
+}

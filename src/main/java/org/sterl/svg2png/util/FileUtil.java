@@ -1,4 +1,4 @@
-package org.sterl.encoding.util;
+package org.sterl.svg2png.util;
 
 import java.io.File;
 import java.net.URI;

@@ -1,4 +1,4 @@
-package org.sterl.encoding.config;
+package org.sterl.svg2png.config;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.Test;
-import org.sterl.encoding.util.FileUtil;
+import org.sterl.svg2png.config.FileOutput;
+import org.sterl.svg2png.config.OutputConfig;
+import org.sterl.svg2png.util.FileUtil;
 
 public class TestFileOutput {
 
@@ -35,6 +37,15 @@ public class TestFileOutput {
         assertTrue(outFile.toOutputFile(srcFile, null, null).getAbsolutePath().endsWith("/sample.png"));
         assertTrue(outFile.toOutputFile(srcFile, null, "bar").getAbsolutePath().length() > 12);
         assertTrue(outFile.toOutputFile(srcFile, null, "bar").getAbsolutePath().endsWith("/bar.png"));
+    }
+    
+    @Test
+    public void testCommonName() {
+        FileOutput fileOutput = new FileOutput();
+        fileOutput.setName("ic_launcher.png");
+        fileOutput.setDirectory("mipmap-xxhdpi");
+
+        assertTrue(fileOutput.toOutputFile(new File("foo.svg"), null, null).getAbsolutePath().endsWith("mipmap-xxhdpi/ic_launcher.png"));
     }
 
 }

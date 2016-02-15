@@ -1,13 +1,13 @@
-package org.sterl.encoding;
+package org.sterl.svg2png;
 
 import java.io.FileInputStream;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.apache.commons.io.IOUtils;
-import org.sterl.encoding.config.FileOutput;
-import org.sterl.encoding.config.OutputConfig;
-import org.sterl.encoding.util.FileUtil;
+import org.sterl.svg2png.config.FileOutput;
+import org.sterl.svg2png.config.OutputConfig;
+import org.sterl.svg2png.util.FileUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -20,7 +20,8 @@ public enum CliOptions {
     HEIGHT("h", null, true, "Height of the output file."),
     CONFIG("c", null, true, "JSON Config file for the file output."),
     
-    ANDROID(null, "android", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
+    ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
+    ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
     ANDROID_SMALL(null, "android-small", false, "Android Small default config from mdpi 24x24 -> xxxhdpi 96x96.")
     ;
@@ -67,6 +68,12 @@ public enum CliOptions {
         } else if (cmd.hasOption(ANDROID_ICON.longName)) {
             try {
                 result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-icon.json"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (cmd.hasOption(ANDROID_LAUNCH.longName)) {
+            try {
+                result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-launcher.json"));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
