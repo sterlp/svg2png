@@ -5,7 +5,7 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
 
 ## Download & Requirements
 
-* [Download at svg2png at bintray](https://bintray.com/puel/Releases/svg2png#files)
+* [Download latest release version of svg2png](https://github.com/puel/svg2png/releases)
 * You have to have Java 8 installed on your PC
 * Sidenote: [Google Android Icons](https://www.google.com/design/icons/)
 
