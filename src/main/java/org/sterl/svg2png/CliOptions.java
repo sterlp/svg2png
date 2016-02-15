@@ -23,7 +23,8 @@ public enum CliOptions {
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
-    ANDROID_SMALL(null, "android-small", false, "Android Small default config from mdpi 24x24 -> xxxhdpi 96x96.")
+    ANDROID_SMALL(null, "android-small", false, "Android Small default config from mdpi 24x24 -> xxxhdpi 96x96."),
+    ANDROID_24dp(null, "android-24dp", false, "Android 24dp icons, with suffix _24dp -- mdpi 24x24 -> xxxhdpi 96x96.")
     ;
     
     private final String shortName;
@@ -72,6 +73,12 @@ public enum CliOptions {
                 throw new RuntimeException(e);
             }
         } else if (cmd.hasOption(ANDROID_LAUNCH.longName)) {
+            try {
+                result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-launcher.json"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (cmd.hasOption(ANDROID_24dp.longName)) {
             try {
                 result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-launcher.json"));
             } catch (Exception e) {
