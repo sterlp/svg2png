@@ -60,7 +60,7 @@ java -jar svg2png
 
 ## JSON Android Config Sample
 
-```javascript
+```JSON
 {
     "files": [
         {
