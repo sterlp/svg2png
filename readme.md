@@ -17,7 +17,16 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
         # generate a PNG with a name
         svg2png -f foo.svg -n bar.png
         
-        # convert all file in a directory
+        # Convert all *.svg files in the current directory to 24dp android png files (generates drawable-* directories)
+        svg2png --android-small -d .
+        
+        # Convert 'my_picture.svg' using the android profile 48dp (generates drawable-* directories)
+        svg2png --android -f my_picture.svg
+        
+        # Converts 'my-logo.svg' as android logo 48dp, using ic_launcher.png as name, generates into mipmap-* directories
+        svg2png --android-launch -f my-logo.svg
+        
+        # convert all files in the directory '/Picures/icons/svg' and use '/Pictures/icons/png' as the output directory
         svg2png -d /Picures/icons/svg -o /Pictures/icons/png
         
         # convert with a JSON configuration
