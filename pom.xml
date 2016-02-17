@@ -6,7 +6,7 @@
     <groupId>org.sterl.svg2png</groupId>
     <artifactId>svg2png</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <url>https://github.com/puel/SvgToPng</url>
     <inceptionYear>2015</inceptionYear>
     <name>Svg to PNG CL util</name>
