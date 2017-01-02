@@ -25,7 +25,8 @@ public enum CliOptions {
     ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
     ANDROID_SMALL(null, "android-small", false, "Android Small default config from mdpi 24x24 -> xxxhdpi 96x96."),
     ANDROID_24dp(null, "android-24dp", false, "Android 24dp icons, with suffix _24dp -- mdpi 24x24 -> xxxhdpi 96x96."),
-    ANDROID_36dp(null, "android-36dp", false, "Android 24dp icons, with suffix _36dp -- mdpi 36x36 -> xxxhdpi 144x011.")
+    ANDROID_36dp(null, "android-36dp", false, "Android 36dp icons, with suffix _36dp -- mdpi 36x36 -> xxxhdpi 144x144."),
+    ANDROID_48dp(null, "android-48dp", false, "Android 48dp icons, with suffix _48dp -- mdpi 48x48 -> xxxhdpi 192x192.")
     ;
     
     private final String shortName;
@@ -88,6 +89,12 @@ public enum CliOptions {
         } else if (cmd.hasOption(ANDROID_36dp.longName)) {
             try {
                 result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-36dp.json"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else if (cmd.hasOption(ANDROID_48dp.longName)) {
+            try {
+                result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/android-48dp.json"));
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
