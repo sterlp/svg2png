@@ -19,7 +19,7 @@ public enum CliOptions {
     WIDTH("w", null, true, "Width of the output file."),
     HEIGHT("h", null, true, "Height of the output file."),
     CONFIG("c", null, true, "JSON Config file for the file output."),
-    
+
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
@@ -33,20 +33,25 @@ public enum CliOptions {
     private final String longName;
     private final boolean hasArg;
     private final String description;
-    
+
     private CliOptions(String shortName, String longName, boolean hasArg, String description) {
         this.shortName = shortName;
         this.longName = longName;
         this.hasArg = hasArg;
         this.description = description;
     }
-    
+
     public static void addOptions(Options options) {
         for (CliOptions o : CliOptions.values()) {
             options.addOption(o.shortName, o.longName, o.hasArg, o.description);
         }
     }
-    
+
+    private static String getValue(CommandLine cmd, CliOptions option) {
+        if (cmd.hasOption(option.shortName)) return cmd.getOptionValue(option.shortName);
+        else return null;
+    }
+
     public static OutputConfig parse(CommandLine cmd) {
         OutputConfig result;
         ObjectMapper m = new ObjectMapper();
@@ -105,6 +110,10 @@ public enum CliOptions {
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));
         result.setOutputName(getValue(cmd, NAME));
+        for (FileOutput f : result.getFiles()) {
+            f.setName(getValue(cmd, NAME));
+        }
+
         result.setOutputDirectory(getValue(cmd, OUTPUT));
 
         if (result.getFiles().isEmpty()) {
@@ -119,10 +128,5 @@ public enum CliOptions {
         }
 
         return result;
-    }
-    
-    private static String getValue(CommandLine cmd, CliOptions option) {
-        if (cmd.hasOption(option.shortName)) return cmd.getOptionValue(option.shortName);
-        else return null;
     }
 }

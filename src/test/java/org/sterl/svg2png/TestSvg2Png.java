@@ -60,7 +60,31 @@ public class TestSvg2Png {
         assertEquals("sample.png", files.get(0).getName());
         files.get(0).delete();
     }
-    
+
+    @Test
+    public void textNameConversionFile() throws Exception {
+        List<File> files = Main.run(new String[]{
+                "-n","testConversion.png",
+                "-f", getClass().getResource("/sample.svg").toURI().toString()
+        });
+        System.out.println(files);
+        assertEquals(1, files.size());
+        assertEquals("testConversion.png", files.get(0).getName());
+        files.get(0).delete();
+    }
+    @Test
+    public void textNameConversionFile2() throws Exception {
+        List<File> files = Main.run(new String[]{
+                "--android-launch",
+                "-n","testConversion.png",
+                "-f", getClass().getResource("/sample.svg").toURI().toString()
+        });
+        System.out.println(files);
+        assertEquals(5, files.size());
+        assertEquals("testConversion.png", files.get(0).getName());
+        files.get(0).delete();
+    }
+
     @Test
     public void testConversionDirectory() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());
@@ -70,8 +94,8 @@ public class TestSvg2Png {
             f.deleteOnExit();
         });
         assertEquals(2, convert.size());
-        assertEquals("sample.png", convert.get(0).getName());
-        assertEquals("sample2.png", convert.get(1).getName());
+        assertEquals("sample2.png", convert.get(0).getName());
+        assertEquals("sample.png", convert.get(1).getName());
         
         convert.stream().forEach(f -> f.delete());
     }
