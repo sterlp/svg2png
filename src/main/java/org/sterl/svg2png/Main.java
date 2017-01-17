@@ -26,42 +26,54 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            
             run(args);
-        } catch (Exception e) {
+        } catch (Svg2PngException e) {
             printHelp();
-            System.out.println();
-            System.err.println("*** Error: " + e.getMessage() + " ***");
+            System.err.println("\n\n*** Error: " + e.getMessage() + " ***");
+            OutputConfig c = e.getCfg();
+            if (c != null) {
+                if (c.getInputFile() != null) System.err.println("Input File: " + c.getInputFile());
+                if (c.getOutputName() != null) System.err.println("Output Name: " + c.getOutputName());
+                System.err.println("Output Directory: " + c.getOutputDirectory());
+            }
+            System.err.println("\n\n");
         }
     }
 
-    static List<File> run(String[] args) throws ParseException, IOException, TranscoderException {
+    static List<File> run(String[] args) throws Svg2PngException {
         OutputConfig cfg = null;
-        if (null == args || args.length == 0) {
-            printHelp();
-            System.exit(0);
-        } else if (args.length == 1) {
-            cfg = OutputConfig.fromPath(args[0]);
-        } else {
-            CommandLine cmd = new DefaultParser().parse(options, args);
-            cfg = CliOptions.parse(cmd);
+        try {
+            if (null == args || args.length == 0) {
+                printHelp();
+                System.exit(0);
+            } else if (args.length == 1) {
+                cfg = OutputConfig.fromPath(args[0]);
+            } else {
+                CommandLine cmd = new DefaultParser().parse(options, args);
+                cfg = CliOptions.parse(cmd);
+            }
+            
+            // validation
+            if ((cfg.getInputFile() == null && cfg.getInputDirectory() == null)
+                    || (cfg.getInputFile() != null && cfg.getInputDirectory() != null)) {
+                throw new IllegalArgumentException("Pleace specify either a directory or a file to convert!");
+            } else if (cfg.getInputFile() != null) {
+                File f = FileUtil.newFile(cfg.getInputFile());
+                if (!f.exists()) throw new IllegalArgumentException("File '" + cfg.getInputFile() + "' not found!");
+                if (!f.isFile()) throw new IllegalArgumentException(cfg.getInputFile() + " is not a file!");
+            } else if (cfg.getInputDirectory() != null) {
+                File d = FileUtil.newFile(cfg.getInputDirectory());
+                if (!d.exists()) throw new IllegalArgumentException("Directory " + cfg.getInputDirectory() + " not found!");
+                if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputDirectory() + " is not a directory!");
+            }
+            if (cfg.getOutputDirectory() == null && cfg.getOutputName() != null) {
+                cfg.setOutputDirectory("./");
+            }
+
+            return new Svg2Png(cfg).convert();
+        } catch (Exception e) {
+            throw new Svg2PngException(e, cfg);
         }
-        
-        // validation
-        if ((cfg.getInputFile() == null && cfg.getInputDirectory() == null)
-                || (cfg.getInputFile() != null && cfg.getInputDirectory() != null)) {
-            throw new IllegalArgumentException("Pleace specify either a directory or a file to convert!");
-        } else if (cfg.getInputFile() != null) {
-            File f = FileUtil.newFile(cfg.getInputFile());
-            if (!f.exists()) throw new IllegalArgumentException("File '" + cfg.getInputFile() + "' not found!");
-            if (!f.isFile()) throw new IllegalArgumentException(cfg.getInputFile() + " is not a file!");
-        } else if (cfg.getInputDirectory() != null) {
-            File d = FileUtil.newFile(cfg.getInputDirectory());
-            if (!d.exists()) throw new IllegalArgumentException("Directory " + cfg.getInputDirectory() + " not found!");
-            if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputDirectory() + " is not a directory!");
-        }
-        
-        return new Svg2Png(cfg).convert();
     }
     
     private static void printHelp() {

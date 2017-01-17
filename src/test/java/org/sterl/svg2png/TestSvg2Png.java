@@ -53,7 +53,7 @@ public class TestSvg2Png {
     }
     
     @Test
-    public void textCliSingleFile() throws Exception {
+    public void testCliSingleFile() throws Exception {
         List<File> files = Main.run(new String[]{ "-f", getClass().getResource("/sample.svg").toURI().toString()});
         System.out.println(files);
         assertEquals(1, files.size());
@@ -62,7 +62,7 @@ public class TestSvg2Png {
     }
 
     @Test
-    public void textNameConversionFile() throws Exception {
+    public void testNameConversionFile() throws Exception {
         List<File> files = Main.run(new String[]{
                 "-n","testConversion.png",
                 "-f", getClass().getResource("/sample.svg").toURI().toString()
@@ -72,31 +72,34 @@ public class TestSvg2Png {
         assertEquals("testConversion.png", files.get(0).getName());
         files.get(0).delete();
     }
+
     @Test
-    public void textNameConversionFile2() throws Exception {
+    public void testNameMultipleFilesOutputs() throws Exception {
         List<File> files = Main.run(new String[]{
                 "--android-launch",
                 "-n","testConversion.png",
                 "-f", getClass().getResource("/sample.svg").toURI().toString()
         });
-        System.out.println(files);
         assertEquals(5, files.size());
-        assertEquals("testConversion.png", files.get(0).getName());
-        files.get(0).delete();
+        for (File file : files) {
+            assertEquals("testConversion.png", file.getName());
+            file.delete();
+        }
     }
 
     @Test
     public void testConversionDirectory() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());
-        
         List<File> convert = new Svg2Png(cfg).convert();
         convert.stream().forEach(f -> {
             f.deleteOnExit();
         });
+
         assertEquals(2, convert.size());
-        assertEquals("sample2.png", convert.get(0).getName());
-        assertEquals("sample.png", convert.get(1).getName());
-        
+        System.out.println(convert);
+        assertEquals("sample.png", convert.get(0).getName());
+        assertEquals("sample2.png", convert.get(1).getName());
+
         convert.stream().forEach(f -> f.delete());
     }
     
