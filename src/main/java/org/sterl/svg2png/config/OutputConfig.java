@@ -36,4 +36,8 @@ public class OutputConfig {
     public void addOutput() {
         files.add(new FileOutput());
     }
+    
+    public boolean hasDirctoryOrFile() {
+        return inputFile != null || inputDirectory != null;
+    }
 }
