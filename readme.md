@@ -11,6 +11,9 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
 
 ## CLI Samples
 
+* use either **java -jar svg2png**
+* or download the executable jar and use **svg2png**
+
 ```Shell
 # just convert a file
 svg2png foo.svg
