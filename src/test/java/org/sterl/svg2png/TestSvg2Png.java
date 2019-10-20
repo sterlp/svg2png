@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.sterl.svg2png.Main;
 import org.sterl.svg2png.Svg2Png;
 import org.sterl.svg2png.config.OutputConfig;
+import org.sterl.svg2png.util.FileUtil;
 
 public class TestSvg2Png {
     
@@ -83,7 +84,7 @@ public class TestSvg2Png {
         assertEquals(5, files.size());
         for (File file : files) {
             assertEquals("testConversion.png", file.getName());
-            file.delete();
+            FileUtils.deleteDirectory(file.getParentFile());
         }
     }
 
@@ -91,14 +92,13 @@ public class TestSvg2Png {
     public void testConversionDirectory() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());
         List<File> convert = new Svg2Png(cfg).convert();
-        convert.stream().forEach(f -> {
-            f.deleteOnExit();
-        });
+        convert.stream().forEach(f -> f.deleteOnExit());
 
         assertEquals(2, convert.size());
-        System.out.println(convert);
-        assertEquals("sample.png", convert.get(0).getName());
-        assertEquals("sample2.png", convert.get(1).getName());
+        assertTrue("sample.png not found", 
+                convert.stream().filter(f -> "sample.png".equals(f.getName())).findFirst().isPresent());
+        assertTrue("sample2.png not found", 
+                convert.stream().filter(f -> "sample2.png".equals(f.getName())).findFirst().isPresent());
 
         convert.stream().forEach(f -> f.delete());
     }
