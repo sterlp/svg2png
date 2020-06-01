@@ -13,6 +13,7 @@ import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.sterl.svg2png.config.FileOutput;
 import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;
@@ -44,9 +45,11 @@ public class Svg2Png {
     }
 
     private static List<File> convertFile(File input, OutputConfig cfg) throws IOException, TranscoderException, FileNotFoundException {
-        TranscoderInput ti = new TranscoderInput(input.toURI().toString());
-        PNGTranscoder t = new PNGTranscoder();
-        List<File> generated = new ArrayList<>();
+        final TranscoderInput ti = new TranscoderInput(input.toURI().toString());
+        final PNGTranscoder t = new PNGTranscoder();
+        final List<File> generated = new ArrayList<>();
+        
+        final String inputPath = input.getParent();
 
         StringBuilder info = new StringBuilder();
         for (FileOutput out : cfg.getFiles()) {
@@ -55,12 +58,12 @@ public class Svg2Png {
 
             if (out.getWidth() > 0) {
                 t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(out.getWidth()));
-                info.append(" w").append(out.getWidth());
+                info.append(StringUtils.leftPad(" w"+ out.getWidth(), 5));
             } else t.removeTranscodingHint(PNGTranscoder.KEY_WIDTH);
 
             if (out.getHeight() > 0) {
                 t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(out.getHeight()));
-                info.append(" h").append(out.getHeight());
+                info.append(StringUtils.leftPad(" h"+out.getHeight(), 5));
             } else t.removeTranscodingHint(PNGTranscoder.KEY_HEIGHT);
             
             File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());
@@ -72,7 +75,9 @@ public class Svg2Png {
             try (FileOutputStream outStram = new FileOutputStream(outputFile)) {
                 t.transcode(ti, new TranscoderOutput(outStram));
                 generated.add(outputFile);
-                info.append(" ").append(outputFile.getAbsolutePath());
+                String outF = outputFile.getCanonicalPath();
+                if (inputPath != null && inputPath.length() > 0) outF.replace(inputPath, "");
+                info.append("\t").append(outF);
             }
             System.out.println(info.toString());
         }

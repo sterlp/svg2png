@@ -28,7 +28,7 @@ public class OutputConfig {
         else result.setInputDirectory(f.getAbsolutePath());
 
         
-        result.setOutputDirectory("./"); // all into the current directory
+        result.setOutputDirectory(new File(".").getAbsolutePath()); 
         result.addOutput(); // one result
         return result;
     }

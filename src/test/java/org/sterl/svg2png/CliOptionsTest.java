@@ -24,7 +24,7 @@ public class CliOptionsTest {
         OutputConfig cfg = CliOptions.parse(cmd);
 
         assertNull(cfg.getInputDirectory());
-        assertNull(cfg.getOutputDirectory());
+        assertEquals(new File(".").getAbsolutePath(), cfg.getOutputDirectory());
         assertNull(cfg.getOutputName());
         assertEquals(5, cfg.getFiles().size());
         assertEquals("ic_launcher.svg", cfg.getInputFile());
@@ -33,7 +33,7 @@ public class CliOptionsTest {
             final String outPath = fo.toOutputFile(new File("ic_launcher.svg"), null, null).getAbsolutePath();
             System.out.println(outPath);
             assertTrue(!outPath.startsWith("null/"));
-            assertTrue(outPath.endsWith("/ic_launcher.png"));
+            assertTrue(outPath.endsWith("/ic_launcher.png".replace('/', File.separatorChar)));
         }
     }
 }

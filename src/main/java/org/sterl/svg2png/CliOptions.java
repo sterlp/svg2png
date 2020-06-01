@@ -1,5 +1,6 @@
 package org.sterl.svg2png;
 
+import java.io.File;
 import java.io.FileInputStream;
 
 import org.apache.commons.cli.CommandLine;
@@ -110,11 +111,14 @@ public enum CliOptions {
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));
         result.setOutputName(getValue(cmd, NAME));
+        result.setOutputDirectory(getValue(cmd, OUTPUT));
+        if (result.getOutputDirectory() == null) {
+            result.setOutputDirectory(new File(".").getAbsolutePath());
+        }
+
         for (FileOutput f : result.getFiles()) {
             f.setName(getValue(cmd, NAME));
         }
-
-        result.setOutputDirectory(getValue(cmd, OUTPUT));
 
         if (result.getFiles().isEmpty()) {
             FileOutput out = new FileOutput();

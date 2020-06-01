@@ -1,5 +1,5 @@
 package org.sterl.svg2png.config;
-
+import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -29,14 +29,14 @@ public class TestFileOutput {
         FileOutput outFile = cfg.getFiles().get(0);
         
         File srcFile = FileUtil.newFile(cfg.getInputFile());
-        assertEquals("./sample.png", outFile.toOutputFile(srcFile, ".", null).toString());
-        assertEquals("/tmp/sample.png", outFile.toOutputFile(srcFile, "/tmp", null).toString());
+        assertEquals("./sample.png".replace('/', File.separatorChar), outFile.toOutputFile(srcFile, ".", null).toString());
+        assertEquals("/tmp/sample.png".replace('/', File.separatorChar), outFile.toOutputFile(srcFile, "/tmp", null).toString());
         System.out.println(outFile.toOutputFile(srcFile, "somesubdir", "hallo.png").toString());
         
         outFile.setDirectory(tmpDirFoooo.toAbsolutePath().toString());
-        assertTrue(outFile.toOutputFile(srcFile, null, null).getAbsolutePath().endsWith("/sample.png"));
+        assertEndsWith(outFile.toOutputFile(srcFile, null, null).getAbsolutePath(), "/sample.png".replace('/', File.separatorChar));
         assertTrue(outFile.toOutputFile(srcFile, null, "bar").getAbsolutePath().length() > 12);
-        assertTrue(outFile.toOutputFile(srcFile, null, "bar").getAbsolutePath().endsWith("/bar.png"));
+        assertEndsWith(outFile.toOutputFile(srcFile, null, "bar").getAbsolutePath(), "/bar.png".replace('/', File.separatorChar));
     }
     
     @Test
@@ -45,7 +45,7 @@ public class TestFileOutput {
         fileOutput.setName("ic_launcher.png");
         fileOutput.setDirectory("mipmap-xxhdpi");
 
-        assertTrue(fileOutput.toOutputFile(new File("foo.svg"), null, null).getAbsolutePath().endsWith("mipmap-xxhdpi/ic_launcher.png"));
+        assertEndsWith(fileOutput.toOutputFile(new File("foo.svg"), null, null).getAbsolutePath(), "mipmap-xxhdpi/ic_launcher.png".replace('/', File.separatorChar));
     }
 
 }

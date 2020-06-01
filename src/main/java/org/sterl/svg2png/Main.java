@@ -1,15 +1,12 @@
 package org.sterl.svg2png;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
-import org.apache.batik.transcoder.TranscoderException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;

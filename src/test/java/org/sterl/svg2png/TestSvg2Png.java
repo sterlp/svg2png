@@ -1,8 +1,8 @@
 package org.sterl.svg2png;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 
 import java.io.File;
 import java.util.List;
@@ -11,10 +11,7 @@ import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.sterl.svg2png.Main;
-import org.sterl.svg2png.Svg2Png;
 import org.sterl.svg2png.config.OutputConfig;
-import org.sterl.svg2png.util.FileUtil;
 
 public class TestSvg2Png {
     
@@ -114,11 +111,11 @@ public class TestSvg2Png {
                 tmpDir.getAbsolutePath()
         });
         assertEquals(5, files.size());
-        assertEndsWith(files.get(0).getAbsolutePath(), "/tmp1/drawable-xxxhdpi/sample.png");
-        assertEndsWith(files.get(1).getAbsolutePath(), "/tmp1/drawable-xxhdpi/sample.png");
-        assertEndsWith(files.get(2).getAbsolutePath(), "/tmp1/drawable-xhdpi/sample.png");
-        assertEndsWith(files.get(3).getAbsolutePath(), "/tmp1/drawable-hdpi/sample.png");
-        assertEndsWith(files.get(4).getAbsolutePath(), "/tmp1/drawable-mdpi/sample.png");
+        assertEndsWith(files.get(0).getAbsolutePath(), "/tmp1/drawable-xxxhdpi/sample.png".replace('/', File.separatorChar));
+        assertEndsWith(files.get(1).getAbsolutePath(), "/tmp1/drawable-xxhdpi/sample.png".replace('/', File.separatorChar));
+        assertEndsWith(files.get(2).getAbsolutePath(), "/tmp1/drawable-xhdpi/sample.png".replace('/', File.separatorChar));
+        assertEndsWith(files.get(3).getAbsolutePath(), "/tmp1/drawable-hdpi/sample.png".replace('/', File.separatorChar));
+        assertEndsWith(files.get(4).getAbsolutePath(), "/tmp1/drawable-mdpi/sample.png".replace('/', File.separatorChar));
     }
     
     @Test
@@ -143,10 +140,5 @@ public class TestSvg2Png {
                 tmpDir.getAbsolutePath()
         });
         assertEquals(10, files.size());
-    }
-
-    private void assertEndsWith(String absolutePath, String value) {
-        assertNotNull("Expected end with: " + value, absolutePath);
-        assertTrue(value + " doesn't end with: " + value, absolutePath.endsWith(value));
     }
 }
