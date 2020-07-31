@@ -95,3 +95,6 @@ java -jar svg2png
     ]
 }
 ```
+
+# Links
+- https://developer.android.com/training/multiscreen/screendensities

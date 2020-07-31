@@ -62,7 +62,7 @@ public class TestSvg2Png {
     @Test
     public void testNameConversionFile() throws Exception {
         List<File> files = Main.run(new String[]{
-                "-n","testConversion.png",
+                "-n", "testConversion.png",
                 "-f", getClass().getResource("/sample.svg").toURI().toString()
         });
         System.out.println(files);
@@ -78,13 +78,27 @@ public class TestSvg2Png {
                 "-n","testConversion.png",
                 "-f", getClass().getResource("/sample.svg").toURI().toString()
         });
-        assertEquals(5, files.size());
+        assertEquals(6, files.size());
         for (File file : files) {
             assertEquals("testConversion.png", file.getName());
-            FileUtils.deleteDirectory(file.getParentFile());
+            file.deleteOnExit();
         }
     }
 
+    @Test
+    public void testNameMultipleFilesDefaultName() throws Exception {
+        List<File> files = Main.run(new String[]{
+                "--android-launch",
+                "-f", getClass().getResource("/sample.svg").toURI().toString()
+        });
+        assertEquals(6, files.size());
+        files.forEach((f) -> f.deleteOnExit());
+
+        for (File file : files) {
+            assertEquals("sample.png", file.getName());
+        }
+    }
+    
     @Test
     public void testConversionDirectory() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());

@@ -1,6 +1,11 @@
 {
     "files": [
         {
+            "name": "store_icon.png",
+            "height": 512,
+            "width": 512
+        },
+        {
             "name": "ic_launcher.png",
             "directory": "mipmap-xxxhdpi",
             "height": 192,
