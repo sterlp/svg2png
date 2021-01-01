@@ -1,5 +1,7 @@
 # Free SVG to PNG converter 
 
+![Java CI with Maven](https://github.com/sterlp/svg2png/workflows/Java%20CI%20with%20Maven/badge.svg)
+
 ## Goal
 Manage your Icons in SVG and generate the needed PNG into your projects as needed. No "Web Service" needed, just an executable JAR file.
 
