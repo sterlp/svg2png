@@ -1,46 +1,50 @@
 package org.sterl.svg2png.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import java.io.InputStream;
 
 import org.junit.Test;
-import org.sterl.svg2png.config.FileOutput;
-import org.sterl.svg2png.config.OutputConfig;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class TestFileConfigParsing {
 
+    private ObjectMapper m = new ObjectMapper();
+
     @Test
     public void testAndroid() throws Exception {
-        ObjectMapper m = new ObjectMapper();
-        OutputConfig config = m.readerFor(OutputConfig.class).readValue(getClass().getResourceAsStream("/android.json"));
-        
-        assertEquals(5, config.getFiles().size());
-        assertEquals(192, config.getFiles().get(0).getHeight());
-        assertEquals(192, config.getFiles().get(0).getWidth());
-        assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        try (InputStream is = getClass().getResourceAsStream("/android.json")) {
+            OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
+            assertEquals(5, config.getFiles().size());
+            assertEquals(192, config.getFiles().get(0).getHeight());
+            assertEquals(192, config.getFiles().get(0).getWidth());
+            assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        }
     }
     
     @Test
     public void testAndroidSmall() throws Exception {
-        ObjectMapper m = new ObjectMapper();
-        OutputConfig config = m.readerFor(OutputConfig.class).readValue(getClass().getResourceAsStream("/android-small.json"));
-        
-        assertEquals(5, config.getFiles().size());
-        assertEquals(96, config.getFiles().get(0).getHeight());
-        assertEquals(96, config.getFiles().get(0).getWidth());
-        assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        try (InputStream is = getClass().getResourceAsStream("/android-small.json")) {
+            OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
+            assertEquals(5, config.getFiles().size());
+            assertEquals(96, config.getFiles().get(0).getHeight());
+            assertEquals(96, config.getFiles().get(0).getWidth());
+            assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        }
     }
     
     @Test
     public void testAndroidIcon() throws Exception {
         ObjectMapper m = new ObjectMapper();
-        OutputConfig config = m.readerFor(OutputConfig.class).readValue(getClass().getResourceAsStream("/android-icon.json"));
-        
-        assertEquals(5, config.getFiles().size());
-        assertEquals(128, config.getFiles().get(0).getHeight());
-        assertEquals(128, config.getFiles().get(0).getWidth());
-        assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        try (InputStream is = getClass().getResourceAsStream("/android-icon.json")) {
+            OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
+            
+            assertEquals(5, config.getFiles().size());
+            assertEquals(192, config.getFiles().get(0).getHeight());
+            assertEquals(192, config.getFiles().get(0).getWidth());
+            assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        }
     }
     
     @Test
