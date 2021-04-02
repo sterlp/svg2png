@@ -1,12 +1,14 @@
 package org.sterl.svg2png;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 
 import java.io.File;
 import java.util.List;
 
+import org.apache.batik.transcoder.TranscoderException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -14,9 +16,9 @@ import org.junit.Test;
 import org.sterl.svg2png.config.OutputConfig;
 
 public class TestSvg2Png {
-    
+
     File tmpDir;
-    
+
     @Before
     public void before() {
         tmpDir = new File("./tmp1");
@@ -31,17 +33,17 @@ public class TestSvg2Png {
     @Test
     public void testConversionOfOneFile() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/sample.svg").toURI().toString());
-        
+
         List<File> convert = new Svg2Png(cfg).convert();
         System.out.println(convert);
         assertEquals(1, convert.size());
         assertTrue(convert.get(0).exists());
         assertTrue(convert.get(0).isFile());
         assertTrue(convert.get(0).getTotalSpace() > 1);
-        
+
         convert.get(0).delete();
     }
-    
+
     @Test
     public void testFileFormCmd() throws Exception {
         List<File> files = Main.run(new String[]{getClass().getResource("/sample.svg").toURI().toString()});
@@ -49,7 +51,7 @@ public class TestSvg2Png {
         assertEquals(1, files.size());
         files.get(0).delete();
     }
-    
+
     @Test
     public void testCliSingleFile() throws Exception {
         List<File> files = Main.run(new String[]{ "-f", getClass().getResource("/sample.svg").toURI().toString()});
@@ -98,7 +100,7 @@ public class TestSvg2Png {
             assertEquals("sample.png", file.getName());
         }
     }
-    
+
     @Test
     public void testConversionDirectory() throws Exception {
         OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());
@@ -106,14 +108,14 @@ public class TestSvg2Png {
         convert.stream().forEach(f -> f.deleteOnExit());
 
         assertEquals(2, convert.size());
-        assertTrue("sample.png not found", 
+        assertTrue("sample.png not found",
                 convert.stream().filter(f -> "sample.png".equals(f.getName())).findFirst().isPresent());
-        assertTrue("sample2.png not found", 
+        assertTrue("sample2.png not found",
                 convert.stream().filter(f -> "sample2.png".equals(f.getName())).findFirst().isPresent());
 
         convert.stream().forEach(f -> f.delete());
     }
-    
+
     @Test
     public void testWithConfig() throws Exception {
         List<File> files = Main.run(new String[] {
@@ -131,7 +133,7 @@ public class TestSvg2Png {
         assertEndsWith(files.get(3).getAbsolutePath(), "/tmp1/drawable-hdpi/sample.png".replace('/', File.separatorChar));
         assertEndsWith(files.get(4).getAbsolutePath(), "/tmp1/drawable-mdpi/sample.png".replace('/', File.separatorChar));
     }
-    
+
     @Test
     public void testInternalConfig() throws Exception {
         List<File> files = Main.run(new String[] {
@@ -143,7 +145,7 @@ public class TestSvg2Png {
         });
         assertEquals(10, files.size());
     }
-    
+
     @Test
     public void testIcon() throws Exception {
         List<File> files = Main.run(new String[] {
@@ -154,5 +156,16 @@ public class TestSvg2Png {
                 tmpDir.getAbsolutePath()
         });
         assertEquals(10, files.size());
+    }
+
+    @Test
+    public void testConversionOfFileWithExternalResourceFails() throws Exception {
+        OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/svg-with-external-resource.svg").toURI().toString());
+
+        TranscoderException exception = assertThrows(TranscoderException.class,
+            () -> new Svg2Png(cfg).convert());
+        assertEquals(
+            "The security settings do not allow any external resources to be referenced from the document",
+            exception.getException().getMessage());
     }
 }
