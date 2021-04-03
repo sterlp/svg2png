@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
@@ -47,6 +48,7 @@ public class Svg2Png {
     private static List<File> convertFile(File input, OutputConfig cfg) throws IOException, TranscoderException, FileNotFoundException {
         final TranscoderInput ti = new TranscoderInput(input.toURI().toString());
         final PNGTranscoder t = new PNGTranscoder();
+        t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, false); // Disable XXE
         final List<File> generated = new ArrayList<>();
         
         final String inputPath = input.getParent();
