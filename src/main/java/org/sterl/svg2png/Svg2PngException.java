@@ -8,7 +8,7 @@ public class Svg2PngException extends Exception {
     @Getter
     private final OutputConfig cfg;
 
-    public Svg2PngException(Exception e, OutputConfig config) {
+    public Svg2PngException(Throwable e, OutputConfig config) {
         super(e);
         cfg = config;
     }

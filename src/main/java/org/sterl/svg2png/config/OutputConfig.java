@@ -16,6 +16,7 @@ public class OutputConfig {
     private String inputFile;
     private String outputName;
     private String outputDirectory;
+    private boolean secure = true;
 
     private List<FileOutput> files = new ArrayList<>();
     

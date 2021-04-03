@@ -32,7 +32,7 @@ public class TestSvg2Png {
 
     @Test
     public void testConversionOfOneFile() throws Exception {
-        OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/sample.svg").toURI().toString());
+        OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/svgfolder/sample.svg").toURI().toString());
 
         List<File> convert = new Svg2Png(cfg).convert();
         System.out.println(convert);
@@ -46,7 +46,7 @@ public class TestSvg2Png {
 
     @Test
     public void testFileFormCmd() throws Exception {
-        List<File> files = Main.run(new String[]{getClass().getResource("/sample.svg").toURI().toString()});
+        List<File> files = Main.run(new String[]{getClass().getResource("/svgfolder/sample.svg").toURI().toString()});
         System.out.println(files);
         assertEquals(1, files.size());
         files.get(0).delete();
@@ -54,7 +54,7 @@ public class TestSvg2Png {
 
     @Test
     public void testCliSingleFile() throws Exception {
-        List<File> files = Main.run(new String[]{ "-f", getClass().getResource("/sample.svg").toURI().toString()});
+        List<File> files = Main.run(new String[]{ "-f", getClass().getResource("/svgfolder/sample.svg").toURI().toString()});
         System.out.println(files);
         assertEquals(1, files.size());
         assertEquals("sample.png", files.get(0).getName());
@@ -65,7 +65,7 @@ public class TestSvg2Png {
     public void testNameConversionFile() throws Exception {
         List<File> files = Main.run(new String[]{
                 "-n", "testConversion.png",
-                "-f", getClass().getResource("/sample.svg").toURI().toString()
+                "-f", getClass().getResource("/svgfolder/sample.svg").toURI().toString()
         });
         System.out.println(files);
         assertEquals(1, files.size());
@@ -78,7 +78,7 @@ public class TestSvg2Png {
         List<File> files = Main.run(new String[]{
                 "--android-launch",
                 "-n","testConversion.png",
-                "-f", getClass().getResource("/sample.svg").toURI().toString()
+                "-f", getClass().getResource("/svgfolder/sample.svg").toURI().toString()
         });
         assertEquals(6, files.size());
         for (File file : files) {
@@ -91,7 +91,7 @@ public class TestSvg2Png {
     public void testNameMultipleFilesDefaultName() throws Exception {
         List<File> files = Main.run(new String[]{
                 "--android-launch",
-                "-f", getClass().getResource("/sample.svg").toURI().toString()
+                "-f", getClass().getResource("/svgfolder/sample.svg").toURI().toString()
         });
         assertEquals(6, files.size());
         files.forEach((f) -> f.deleteOnExit());
@@ -103,7 +103,7 @@ public class TestSvg2Png {
 
     @Test
     public void testConversionDirectory() throws Exception {
-        OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/sample.svg").toURI()).getParent());
+        OutputConfig cfg = OutputConfig.fromPath(new File(getClass().getResource("/svgfolder/sample.svg").toURI()).getParent());
         List<File> convert = new Svg2Png(cfg).convert();
         convert.stream().forEach(f -> f.deleteOnExit());
 
@@ -120,7 +120,7 @@ public class TestSvg2Png {
     public void testWithConfig() throws Exception {
         List<File> files = Main.run(new String[] {
                 "-f",
-                getClass().getResource("/sample.svg").toURI().toString(),
+                getClass().getResource("/svgfolder/sample.svg").toURI().toString(),
                 "-c",
                 getClass().getResource("/android.json").toURI().toString(),
                 "-o",
@@ -138,7 +138,7 @@ public class TestSvg2Png {
     public void testInternalConfig() throws Exception {
         List<File> files = Main.run(new String[] {
                 "-d",
-                new File(getClass().getResource("/sample.svg").toURI()).getParent(),
+                new File(getClass().getResource("/svgfolder/sample.svg").toURI()).getParent(),
                 "-android-small",
                 "-o",
                 tmpDir.getAbsolutePath()
@@ -150,7 +150,7 @@ public class TestSvg2Png {
     public void testIcon() throws Exception {
         List<File> files = Main.run(new String[] {
                 "-d",
-                new File(getClass().getResource("/sample.svg").toURI()).getParent(),
+                new File(getClass().getResource("/svgfolder/sample.svg").toURI()).getParent(),
                 "-android-icon",
                 "-o",
                 tmpDir.getAbsolutePath()

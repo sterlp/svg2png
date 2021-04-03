@@ -20,6 +20,7 @@ public enum CliOptions {
     WIDTH("w", null, true, "Width of the output file."),
     HEIGHT("h", null, true, "Height of the output file."),
     CONFIG("c", null, true, "JSON Config file for the file output."),
+    UNSECURE(null, "unsecure", false, "Allow external resources in SVG."),
 
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
@@ -55,7 +56,7 @@ public enum CliOptions {
 
     public static OutputConfig parse(CommandLine cmd) {
         OutputConfig result;
-        ObjectMapper m = new ObjectMapper();
+        final ObjectMapper m = new ObjectMapper();
         if (cmd.hasOption(CONFIG.shortName)) {
             try {
                 result = m.readerFor(OutputConfig.class).readValue(IOUtils.toString(new FileInputStream(FileUtil.newFile(cmd.getOptionValue(CONFIG.shortName)))));
@@ -107,7 +108,9 @@ public enum CliOptions {
         } else {
             result = new OutputConfig();
         }
-
+        if (cmd.hasOption(UNSECURE.longName)) {
+            result.setSecure(false);
+        }
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));
         result.setOutputName(getValue(cmd, NAME));

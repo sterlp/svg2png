@@ -3,6 +3,7 @@ package org.sterl.svg2png;
 import java.io.File;
 import java.util.List;
 
+import org.apache.batik.transcoder.TranscoderException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
@@ -67,6 +68,9 @@ public class Main {
             }
 
             return new Svg2Png(cfg).convert();
+        } catch (TranscoderException e) {
+            if (e.getCause() != null) throw new Svg2PngException(e.getCause(), cfg);
+            else throw new Svg2PngException(e, cfg);
         } catch (Exception e) {
             throw new Svg2PngException(e, cfg);
         }
