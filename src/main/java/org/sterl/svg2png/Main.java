@@ -69,9 +69,9 @@ public class Main {
 
             return new Svg2Png(cfg).convert();
         } catch (TranscoderException e) {
-            Exception ex = e.getException();
+            final Exception ex = e.getException();
             if (ex.getMessage().contains("do not allow any external resources")) {
-                System.out.println("SVG tried to load resources, if this is okay use --unsecure option.");
+                System.out.println("SVG tried to load resources by URI, if this is okay use --unsecure option.");
             }
             throw new Svg2PngException(ex, cfg);
         } catch (Exception e) {
