@@ -12,4 +12,9 @@ public class Svg2PngException extends Exception {
         super(e);
         cfg = config;
     }
+    
+    @Override
+    public String getMessage() {
+        return super.getMessage() + " Config: " + cfg.toString();
+    }
 }

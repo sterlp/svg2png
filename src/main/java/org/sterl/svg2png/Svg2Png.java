@@ -48,25 +48,27 @@ public class Svg2Png {
     private static List<File> convertFile(File input, OutputConfig cfg) throws IOException, TranscoderException, FileNotFoundException {
         final TranscoderInput ti = new TranscoderInput(input.toURI().toString());
         final PNGTranscoder t = new PNGTranscoder();
-        if (cfg.isSecure()) {
-            t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, false); // Disable XXE
-        }
-        final List<File> generated = new ArrayList<>();
-        
-        final String inputPath = input.getParent();
 
-        StringBuilder info = new StringBuilder();
+        // Disable XXE
+        if (cfg.isSecure()) {
+            t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, false); 
+        }
+
+        final List<File> generated = new ArrayList<>();
+        final String inputPath = input.getParent();
+        final StringBuilder info = new StringBuilder();
+
         for (FileOutput out : cfg.getFiles()) {
             info.setLength(0);
             info.append(input.getName());
 
             if (out.getWidth() > 0) {
-                t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, new Float(out.getWidth()));
+                t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, Float.valueOf(out.getWidth()));
                 info.append(StringUtils.leftPad(" w"+ out.getWidth(), 5));
             } else t.removeTranscodingHint(PNGTranscoder.KEY_WIDTH);
 
             if (out.getHeight() > 0) {
-                t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, new Float(out.getHeight()));
+                t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, Float.valueOf(out.getHeight()));
                 info.append(StringUtils.leftPad(" h"+out.getHeight(), 5));
             } else t.removeTranscodingHint(PNGTranscoder.KEY_HEIGHT);
             

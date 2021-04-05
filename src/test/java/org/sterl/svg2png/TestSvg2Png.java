@@ -8,7 +8,6 @@ import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 import java.io.File;
 import java.util.List;
 
-import org.apache.batik.transcoder.TranscoderException;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -157,15 +156,40 @@ public class TestSvg2Png {
         });
         assertEquals(10, files.size());
     }
+    
+    @Test
+    public void testConversionOfFileWithExternalResource() throws Exception {
+        
+        Svg2PngException ex = assertThrows(Svg2PngException.class, () ->
+            Main.run(new String[] {
+                    "--unsecure",
+                    "-d",
+                    new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
+                    "-android-icon",
+                    "-o",
+                    tmpDir.getAbsolutePath()
+            })
+        );
+        System.out.println(ex.getMessage());
+        assertTrue(ex.getMessage().contains("http://localhost:8080/svg"));
+
+    }
 
     @Test
     public void testConversionOfFileWithExternalResourceFails() throws Exception {
-        OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/svg-with-external-resource.svg").toURI().toString());
-
-        TranscoderException exception = assertThrows(TranscoderException.class,
-            () -> new Svg2Png(cfg).convert());
+        Svg2PngException ex = assertThrows(Svg2PngException.class, () ->
+            Main.run(new String[] {
+                    "-d",
+                    new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
+                    "-android-icon",
+                    "-o",
+                    tmpDir.getAbsolutePath()
+            })
+        );
+        Throwable exception = ex.getCause();
+        System.err.println(exception.getMessage());
         assertEquals(
             "The security settings do not allow any external resources to be referenced from the document",
-            exception.getException().getMessage());
+            exception.getMessage());
     }
 }
