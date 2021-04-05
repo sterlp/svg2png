@@ -8,8 +8,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.junit.Test;
-import org.sterl.svg2png.config.FileOutput;
-import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;
 
 public class TestFileOutput {
@@ -23,7 +21,7 @@ public class TestFileOutput {
         Path tmpDirBaaaar = Files.createTempDirectory("Baaaar");
         tmpDirBaaaar.toFile().deleteOnExit();
 
-        OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/sample.svg").toString());
+        OutputConfig cfg = OutputConfig.fromPath(getClass().getResource("/svgs/sample.svg").toString());
         assertEquals(1, cfg.getFiles().size());
         
         FileOutput outFile = cfg.getFiles().get(0);

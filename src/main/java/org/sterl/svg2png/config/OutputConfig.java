@@ -16,6 +16,7 @@ public class OutputConfig {
     private String inputFile;
     private String outputName;
     private String outputDirectory;
+    private boolean allowExternalResource = false;
 
     private List<FileOutput> files = new ArrayList<>();
     
@@ -37,7 +38,7 @@ public class OutputConfig {
         files.add(new FileOutput());
     }
     
-    public boolean hasDirctoryOrFile() {
+    public boolean hasDirectoryOrFile() {
         return inputFile != null || inputDirectory != null;
     }
 }
