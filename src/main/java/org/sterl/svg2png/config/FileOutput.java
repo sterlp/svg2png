@@ -24,18 +24,18 @@ public class FileOutput {
         String path = basePath != null ? basePath : source.getParent();
         if (path == null) path = "";
         // if the configured path is absolute we take it, otherwise we append it
-        if (directory != null && directory.startsWith("/")) {
+        if (directory != null && directory.startsWith(File.separator)) {
             path = directory;
         } 
         if (directory != null) {
             if (path.length() > 0) {
-                path += "/" + directory;
+                path += File.separator + directory;
             } else {
                 path += directory;
             }
         }
         // setting the name
-        path += "/" + buildName(FilenameUtils.getBaseName(source.getName()), name != null ? name : outName, namePrefix, nameSuffix);
+        path += File.separator + buildName(FilenameUtils.getBaseName(source.getName()), name != null ? name : outName, namePrefix, nameSuffix);
         
         return FileUtil.newFile(path);
     }
