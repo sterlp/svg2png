@@ -36,7 +36,7 @@ public class Svg2Png {
         } else {
             File dir = FileUtil.newFile(outCfg.getInputDirectory());
             @SuppressWarnings("unchecked")
-            Collection<File> listFiles = (Collection<File>)FileUtils.listFiles(dir, new String[]{"svg"}, true);
+            Collection<File> listFiles = FileUtils.listFiles(dir, new String[]{"svg"}, true);
             generated = new ArrayList<>();
             for (File file : listFiles) {
                 generated.addAll(convertFile(file, outCfg));
@@ -50,9 +50,7 @@ public class Svg2Png {
         final PNGTranscoder t = new PNGTranscoder();
 
         // Disable XXE
-        if (cfg.isSecure()) {
-            t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, false); 
-        }
+        t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, cfg.isAllowExternalResource()); 
 
         final List<File> generated = new ArrayList<>();
         final String inputPath = input.getParent();
@@ -63,14 +61,14 @@ public class Svg2Png {
             info.append(input.getName());
 
             if (out.getWidth() > 0) {
-                t.addTranscodingHint(PNGTranscoder.KEY_WIDTH, Float.valueOf(out.getWidth()));
+                t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, Float.valueOf(out.getWidth()));
                 info.append(StringUtils.leftPad(" w"+ out.getWidth(), 5));
-            } else t.removeTranscodingHint(PNGTranscoder.KEY_WIDTH);
+            } else t.removeTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH);
 
             if (out.getHeight() > 0) {
-                t.addTranscodingHint(PNGTranscoder.KEY_HEIGHT, Float.valueOf(out.getHeight()));
+                t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, Float.valueOf(out.getHeight()));
                 info.append(StringUtils.leftPad(" h"+out.getHeight(), 5));
-            } else t.removeTranscodingHint(PNGTranscoder.KEY_HEIGHT);
+            } else t.removeTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT);
             
             File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());
             if (outputFile.exists()) {

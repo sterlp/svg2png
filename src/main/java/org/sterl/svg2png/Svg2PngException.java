@@ -15,6 +15,7 @@ public class Svg2PngException extends Exception {
     
     @Override
     public String getMessage() {
-        return super.getMessage() + " Config: " + cfg.toString();
+        if (cfg == null) return super.getMessage();
+        else return super.getMessage() + " Config: " + cfg;
     }
 }

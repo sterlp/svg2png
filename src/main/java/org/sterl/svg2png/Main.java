@@ -52,7 +52,7 @@ public class Main {
             }
             
             // validation
-            if (!cfg.hasDirctoryOrFile() || (cfg.getInputDirectory() != null && cfg.getInputFile() != null)) {
+            if (!cfg.hasDirectoryOrFile() || (cfg.getInputDirectory() != null && cfg.getInputFile() != null)) {
                 throw new IllegalArgumentException("Pleace specify either a directory or a file to convert!");
             } else if (cfg.getInputFile() != null) {
                 File f = FileUtil.newFile(cfg.getInputFile());
@@ -71,7 +71,7 @@ public class Main {
         } catch (TranscoderException e) {
             final Exception ex = e.getException();
             if (ex.getMessage().contains("do not allow any external resources")) {
-                System.out.println("SVG tried to load resources by URI, if this is okay use --unsecure option.");
+                System.out.println("SVG tried to load resources by URI, if this is okay use '--allow-external' or '-e' option.");
             }
             throw new Svg2PngException(ex, cfg);
         } catch (Exception e) {

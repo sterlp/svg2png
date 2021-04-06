@@ -159,10 +159,9 @@ public class TestSvg2Png {
     
     @Test
     public void testConversionOfFileWithExternalResource() throws Exception {
-        
         Svg2PngException ex = assertThrows(Svg2PngException.class, () ->
             Main.run(new String[] {
-                    "--unsecure",
+                    "--allow-external",
                     "-d",
                     new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
                     "-android-icon",
@@ -170,7 +169,18 @@ public class TestSvg2Png {
                     tmpDir.getAbsolutePath()
             })
         );
-        System.out.println(ex.getMessage());
+        assertTrue(ex.getMessage().contains("http://localhost:8080/svg"));
+
+        ex = assertThrows(Svg2PngException.class, () ->
+            Main.run(new String[] {
+                    "-e",
+                    "-d",
+                    new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
+                    "-android-icon",
+                    "-o",
+                    tmpDir.getAbsolutePath()
+            })
+        );
         assertTrue(ex.getMessage().contains("http://localhost:8080/svg"));
 
     }

@@ -20,7 +20,7 @@ public enum CliOptions {
     WIDTH("w", null, true, "Width of the output file."),
     HEIGHT("h", null, true, "Height of the output file."),
     CONFIG("c", null, true, "JSON Config file for the file output."),
-    UNSECURE(null, "unsecure", false, "Allow external resources in SVG."),
+    ALLOW_EXTERNAL("e", "allow-external", false, "Allow external entities to be loaded by the SVG."),
 
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
@@ -108,8 +108,8 @@ public enum CliOptions {
         } else {
             result = new OutputConfig();
         }
-        if (cmd.hasOption(UNSECURE.longName)) {
-            result.setSecure(false);
+        if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
+            result.setAllowExternalResource(true);
         }
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));
