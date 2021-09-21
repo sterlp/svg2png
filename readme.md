@@ -22,6 +22,9 @@ Manage your Icons in SVG and generate the needed PNG into your projects as neede
 # just convert a file
 svg2png foo.svg
 
+# generate a 512x512 PNG
+./svg2png -w 512 -h 512 -f foo.svg
+
 # generate a PNG with a name
 svg2png -f foo.svg -n bar.png
 
