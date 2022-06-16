@@ -53,30 +53,52 @@ java -jar svg2png
 ## CLI Usage
 
         ================================================================================
-                                           SVG to PNG
-
+                                   SVG to PNG                                   
+                                   
         usage: svg2png
-            --android          Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192.
-            --android-24dp     Android 24dp icons, with suffix _24dp -- mdpi 24x24
-                               -> xxxhdpi 96x96.
-            --android-36dp     Android 36dp icons, with suffix _36dp -- mdpi 36x36
-                               -> xxxhdpi 144x144.
-            --android-48dp     Android 48dp icons, with suffix _48dp -- mdpi 48x48
-                               -> xxxhdpi 192x192.
-            --android-icon     Android Icon (Action Bar, Dialog etc.)  config mdpi
-                               36x36 -> xxxhdpi 128x128.
-            --android-launch   Android Launcher Icon config mdpi 48x48 -> xxxhdpi
-                               192x192.
-            --android-small    Android Small default config from mdpi 24x24 ->
-                               xxxhdpi 96x96.
-         -c <arg>              JSON Config file for the file output.
-         -d <arg>              Source directory with one or more files to convert.
-         -f <arg>              Source file to convert.
-         -h <arg>              Height of the output file.
-         -n <arg>              New name to use for all output files.
-         -o <arg>              Output directory where to put the file.
-            --unsecure         Allow external resources in SVG.
-         -w <arg>              Width of the output file.
+            --android             Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192.
+            --android-24dp        Android 24dp icons, with suffix _24dp -- mdpi
+                                24x24 -> xxxhdpi 96x96.
+            --android-36dp        Android 36dp icons, with suffix _36dp -- mdpi
+                                36x36 -> xxxhdpi 144x144.
+            --android-48dp        Android 48dp icons, with suffix _48dp -- mdpi
+                                48x48 -> xxxhdpi 192x192.
+            --android-icon        Android Icon (Action Bar, Dialog etc.)  config
+                                mdpi 36x36 -> xxxhdpi 128x128.
+            --android-launch      Android Launcher Icon config mdpi 48x48 ->
+                                xxxhdpi 192x192.
+            --android-small       Android Small default config from mdpi 24x24 ->
+                                xxxhdpi 96x96.
+        -c <arg>                 JSON Config file for the file output.
+        -d <arg>                 Source directory with one or more files to
+                                convert.
+        -e,--allow-external      Allow external entities to be loaded by the SVG.
+        -f <arg>                 Source file to convert.
+        -h <arg>                 Height of the output file.
+        -n <arg>                 New name to use for all output files.
+        -o <arg>                 Output directory where to put the file.
+            --transparent-white   This is a trick so that viewers which do not
+                                support the alpha channel will see a white
+                                background (and not a black one).
+        -w <arg>                 Width of the output file.
+
+Examples:
+---------
+# just convert a file
+svg2png foo.svg
+
+# generate a PNG with a name
+svg2png -f foo.svg -n bar.png
+
+# convert all file in a directory
+svg2png -d /Picures/icons/svg -o /Pictures/icons/png
+
+# convert with a JSON configuration
+svg2png -d . -c my.json
+
+# convert SVG files using the default Android configuration
+svg2png -d . -o /dev/workset/android-project/app/src/main/res --android
+
 
 
 ## JSON Android Config Sample
