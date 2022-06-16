@@ -22,6 +22,8 @@ public enum CliOptions {
     CONFIG("c", null, true, "JSON Config file for the file output."),
     ALLOW_EXTERNAL("e", "allow-external", false, "Allow external entities to be loaded by the SVG."),
 
+    FORCE_TRANCPARENT_WHITE(null, "transparent-white", false, "This is a trick so that viewers which do not support the alpha channel will see a white background (and not a black one)."),
+
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
@@ -110,6 +112,9 @@ public enum CliOptions {
         }
         if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
             result.setAllowExternalResource(true);
+        }
+        if (cmd.hasOption(FORCE_TRANCPARENT_WHITE.longName)) {
+            result.setForceTransparentWhite(true);
         }
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));

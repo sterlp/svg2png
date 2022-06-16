@@ -16,7 +16,12 @@ public class OutputConfig {
     private String inputFile;
     private String outputName;
     private String outputDirectory;
+    /**
+     * https://xmlgraphics.apache.org/batik/javadoc/org/apache/batik/transcoder/image/ImageTranscoder.html#KEY_FORCE_TRANSPARENT_WHITE
+     * PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE
+     */
     private boolean allowExternalResource = false;
+    private boolean forceTransparentWhite = false;
 
     private List<FileOutput> files = new ArrayList<>();
     

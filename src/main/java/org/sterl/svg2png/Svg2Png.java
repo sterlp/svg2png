@@ -51,6 +51,9 @@ public class Svg2Png {
 
         // Disable XXE
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, cfg.isAllowExternalResource()); 
+        // https://github.com/sterlp/svg2png/issues/11
+        t.addTranscodingHint(PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE, cfg.isForceTransparentWhite());
+        
 
         final List<File> generated = new ArrayList<>();
         final String inputPath = input.getParent();
