@@ -22,6 +22,8 @@ public class OutputConfig {
      */
     private boolean allowExternalResource = false;
     private boolean forceTransparentWhite = false;
+    private String noAlpha = null;
+    private boolean contentsJson = true;
 
     private List<FileOutput> files = new ArrayList<>();
     
