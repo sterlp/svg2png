@@ -7,6 +7,19 @@
 ## Goal
 Manage your Icons in SVG and generate the needed PNG into your projects as needed. No "Web Service" needed, just an executable JAR file.
 
+## Supported plattforms
+Only platforms with a full Java JRE are supported like:
+
+- Windows
+- Linux
+- Mac OS
+
+## Not supported plattfroms
+
+### Android
+
+Batik SVG Toolkit isn't supported by android because of the missing [Java2D API](https://stackoverflow.com/questions/7418937/how-to-integrate-batik-with-android-to-open-display-svg-files)
+
 ## Download & Requirements
 
 * [Download latest release version of svg2png](https://github.com/puel/svg2png/releases)
