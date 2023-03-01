@@ -2,6 +2,8 @@ package org.sterl.svg2png;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -109,6 +111,9 @@ public enum CliOptions {
                 throw new RuntimeException(e);
             }
         } else if (cmd.hasOption(IOS_ICONS.longName)) {
+            if (!cmd.hasOption(NAME.shortName))
+                throw new RuntimeException("-n name must be specified when --ios is used.");
+
             try {
                 result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/ios.json"));
             } catch (Exception e) {
@@ -124,7 +129,16 @@ public enum CliOptions {
             result.setForceTransparentWhite(true);
         }
         if (cmd.hasOption(NO_ALPHA.longName)) {
-            result.setNoAlpha(getValue(cmd, NO_ALPHA));
+            String bg = getValue(cmd, NO_ALPHA);
+            if (bg == null)
+                throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
+
+            Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(bg);
+            if (!matcher.find())
+                throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
+
+            result.setNoAlpha(bg);
         }
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));

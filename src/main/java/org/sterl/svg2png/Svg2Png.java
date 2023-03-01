@@ -56,10 +56,12 @@ public class Svg2Png {
 
             contentsJson = contentsJson.replace("?PREFIX?", outCfg.getOutputName());
 
-            String contentsFilename = outCfg.getOutputDirectory() + File.separator + "Contents.json";
-            try (PrintWriter out = new PrintWriter(contentsFilename)) {
+            File contents = new File(outCfg.getOutputDirectory() + File.separator + "Contents.json");
+            try (PrintWriter out = new PrintWriter(contents)) {
                 out.println(contentsJson);
             }
+
+            generated.add(contents);
         }
 
         return generated;

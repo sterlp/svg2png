@@ -23,7 +23,7 @@ public class OutputConfig {
     private boolean allowExternalResource = false;
     private boolean forceTransparentWhite = false;
     private String noAlpha = null;
-    private boolean contentsJson = true;
+    private boolean contentsJson = false;
 
     private List<FileOutput> files = new ArrayList<>();
     
