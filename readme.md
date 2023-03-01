@@ -5,7 +5,7 @@
 [![CodeQL](https://github.com/sterlp/svg2png/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sterlp/svg2png/actions/workflows/codeql-analysis.yml)
 
 ## Goal
-Manage your Icons in SVG and generate the needed PNG into your projects as needed. No "Web Service" needed, just an executable JAR file.
+Manage your Icons in SVG and generate the needed PNG into your projects as needed. No "Web Service" needed, just an executable JAR file. This library is based on [batik](https://xmlgraphics.apache.org/batik/)
 
 ## Supported plattforms
 Only platforms with a full Java JRE are supported like:
