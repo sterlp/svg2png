@@ -112,7 +112,8 @@ svg2png -d . -c my.json
 # convert SVG files using the default Android configuration
 svg2png -d . -o /dev/workset/android-project/app/src/main/res --android
 
-
+# convert SVG to iOS icons with an orange background
+svg2png -f foo.svg -n bar -o icons --ios --no-alpha ffbd33
 
 ## JSON Android Config Sample
 
