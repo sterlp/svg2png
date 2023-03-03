@@ -17,7 +17,7 @@ public class Main {
 
     static Options options = new Options();
     static HelpFormatter formatter = new HelpFormatter();
-    
+
     static {
         CliOptions.addOptions(options);
     }
@@ -50,7 +50,7 @@ public class Main {
                 CommandLine cmd = new DefaultParser().parse(options, args);
                 cfg = CliOptions.parse(cmd);
             }
-            
+
             // validation
             if (!cfg.hasDirectoryOrFile() || (cfg.getInputDirectory() != null && cfg.getInputFile() != null)) {
                 throw new IllegalArgumentException("Please specify either a directory or a file to convert!");
@@ -78,7 +78,7 @@ public class Main {
             throw new Svg2PngException(e, cfg);
         }
     }
-    
+
     private static void printHelp() {
         System.out.println(StringUtils.repeat("=", 80));
         System.out.println(StringUtils.center("SVG to PNG", 80));

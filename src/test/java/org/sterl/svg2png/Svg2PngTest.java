@@ -1,34 +1,52 @@
 package org.sterl.svg2png;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.After;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.sterl.svg2png.config.OutputConfig;
 
 public class Svg2PngTest {
 
-    File tmpDir;
+    static final File tmpDir = new File("./tmp1");
 
     @Before
-    public void before() {
-        tmpDir = new File("./tmp1");
+    public void before() throws IOException {
         tmpDir.mkdirs();
         tmpDir.deleteOnExit();
     }
-    @After
-    public void after() throws Exception {
-        FileUtils.deleteDirectory(tmpDir);
+    @AfterClass
+    public static void after() throws Exception {
+        clean();
+    }
+    private static void clean() {
+        try {
+            FileUtils.deleteDirectory(tmpDir);
+        } catch (Exception e) {
+            System.err.println("TEST: Failed to clean " + tmpDir + " -> " + e.getCause().getMessage());
+            Collection<File> files = FileUtils.listFiles(tmpDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+            for (File file : files) {
+                file.deleteOnExit();
+            }
+            tmpDir.deleteOnExit();
+        }
     }
 
     @Test
@@ -66,7 +84,8 @@ public class Svg2PngTest {
     public void testNameConversionFile() throws Exception {
         List<File> files = Main.run(new String[]{
                 "-n", "testConversion.png",
-                "-f", svgPath("sample.svg")
+                "-f", svgPath("sample.svg"),
+                "-o", tmpDir.getAbsolutePath()
         });
         System.out.println(files);
         assertEquals(1, files.size());
@@ -79,7 +98,8 @@ public class Svg2PngTest {
         List<File> files = Main.run(new String[]{
                 "--android-launch",
                 "-n","testConversion.png",
-                "-f", svgPath("sample.svg")
+                "-f", svgPath("sample.svg"),
+                "-o", tmpDir.getAbsolutePath()
         });
         assertEquals(6, files.size());
         for (File file : files) {
@@ -92,7 +112,8 @@ public class Svg2PngTest {
     public void testNameMultipleFilesDefaultName() throws Exception {
         List<File> files = Main.run(new String[]{
                 "--android-launch",
-                "-f", svgPath("sample.svg")
+                "-f", svgPath("sample.svg"),
+                "-o", tmpDir.getAbsolutePath()
         });
         assertEquals(6, files.size());
         files.forEach((f) -> f.deleteOnExit());
@@ -124,8 +145,7 @@ public class Svg2PngTest {
                 svgPath("sample.svg"),
                 "-c",
                 getClass().getResource("/android.json").toURI().toString(),
-                "-o",
-                tmpDir.getAbsolutePath()
+                "-o", tmpDir.getAbsolutePath()
         });
         assertEquals(5, files.size());
         assertEndsWith(files.get(0).getAbsolutePath(), "/tmp1/drawable-xxxhdpi/sample.png".replace('/', File.separatorChar));
@@ -141,8 +161,7 @@ public class Svg2PngTest {
                 "-d",
                 new File(getClass().getResource("/svgfolder/sample.svg").toURI()).getParent(),
                 "-android-small",
-                "-o",
-                tmpDir.getAbsolutePath()
+                "-o", tmpDir.getAbsolutePath()
         });
         assertEquals(10, files.size());
     }
@@ -153,8 +172,7 @@ public class Svg2PngTest {
                 "-d",
                 new File(getClass().getResource("/svgfolder/sample.svg").toURI()).getParent(),
                 "-android-icon",
-                "-o",
-                tmpDir.getAbsolutePath()
+                "-o", tmpDir.getAbsolutePath()
         });
         assertEquals(10, files.size());
     }
@@ -167,8 +185,7 @@ public class Svg2PngTest {
                     "-d",
                     new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
                     "-android-icon",
-                    "-o",
-                    tmpDir.getAbsolutePath()
+                    "-o", tmpDir.getAbsolutePath()
             })
         );
         assertTrue(ex.getMessage().contains("http://localhost:8080/svg"));
@@ -179,8 +196,7 @@ public class Svg2PngTest {
                     "-d",
                     new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
                     "-android-icon",
-                    "-o",
-                    tmpDir.getAbsolutePath()
+                    "-o", tmpDir.getAbsolutePath()
             })
         );
         assertTrue(ex.getMessage().contains("http://localhost:8080/svg"));
@@ -194,8 +210,7 @@ public class Svg2PngTest {
                     "-d",
                     new File(getClass().getResource("/svg-with-external-resource.svg").toURI()).getParent(),
                     "-android-icon",
-                    "-o",
-                    tmpDir.getAbsolutePath()
+                    "-o", tmpDir.getAbsolutePath()
             })
         );
         Throwable exception = ex.getCause();
@@ -210,14 +225,16 @@ public class Svg2PngTest {
         // GIVEN
         final File normal = convertFile(new String[]{
             "-n", "normal.png",
-            "-f", svgPath("sample.svg")
+            "-f", svgPath("sample.svg"),
+            "-o", tmpDir.getAbsolutePath()
         });
         
         // WHEN
         final File white = convertFile(new String[]{
             "-n", "white.png",
             "-f", svgPath("sample.svg"),
-            "-transparent-white"
+            "-transparent-white",
+            "-o", tmpDir.getAbsolutePath()
         });
 
         // THEN they should not be equal
@@ -225,33 +242,50 @@ public class Svg2PngTest {
     }
 
     @Test
-    public void testAlphaChannelRemoval() throws Exception {
+    public void testCustomAlphaChannel() throws Exception {
         // GIVEN
         final File normal = convertFile(new String[]{
                 "-n", "normal.png",
-                "-f", svgPath("sample.svg")
+                "-f", svgPath("sample.svg"),
+                "-o", tmpDir.getAbsolutePath()
         });
 
         // WHEN
         final File noAlpha = convertFile(new String[]{
                 "-n", "no-alpha.png",
                 "-f", svgPath("sample.svg"),
-                "--no-alpha", "0077ff"
+                "--no-alpha", "0077ff",
+                "-o", tmpDir.getAbsolutePath()
         });
 
         // THEN the file without alpha channel should be smaller
         assertTrue(normal.length() > noAlpha.length());
+        assertTrue("Background sould be 0077FF",
+                IOUtils.contentEquals(
+                        new FileInputStream(noAlpha), 
+                        getClass().getResourceAsStream("/alpha-0077FF.png")));
     }
 
     @Test
     public void testIosIcons() throws Exception {
+        // WHEN
         List<File> files = Main.run(new String[] {
                 "-f", svgPath("sample.svg"),
                 "--ios",
                 "-n", "sample-ios",
                 "-o", tmpDir.getAbsolutePath()
         });
+        // THEN
         assertEquals(16, files.size());
+        
+        // AND
+        File contentJson = new File(tmpDir.getAbsolutePath() + "/Contents.json");
+        assertTrue("Content.json doesn't exists " + contentJson.getAbsolutePath(), 
+                contentJson.exists() && contentJson.isFile());
+        
+        String contentsJsonString = IOUtils.toString(new FileInputStream(contentJson), StandardCharsets.UTF_8);
+        assertTrue(contentsJsonString.contains("sample-ios"));
+        assertFalse(contentsJsonString.contains("?PREFIX?"));
     }
 
     @Test

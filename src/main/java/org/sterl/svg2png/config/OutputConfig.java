@@ -26,17 +26,17 @@ public class OutputConfig {
     private boolean contentsJson = false;
 
     private List<FileOutput> files = new ArrayList<>();
-    
+
     public static OutputConfig fromPath(String file) {
         OutputConfig result = new OutputConfig();
         File f = FileUtil.newFile(file);
         if (!f.exists()) throw new IllegalArgumentException(file + " not found!");
-        
+
         if (f.isFile()) result.setInputFile(f.getAbsolutePath());
         else result.setInputDirectory(f.getAbsolutePath());
 
-        
-        result.setOutputDirectory(new File(".").getAbsolutePath()); 
+
+        result.setOutputDirectory(new File(".").getAbsolutePath());
         result.addOutput(); // one result
         return result;
     }
@@ -44,7 +44,7 @@ public class OutputConfig {
     public void addOutput() {
         files.add(new FileOutput());
     }
-    
+
     public boolean hasDirectoryOrFile() {
         return inputFile != null || inputDirectory != null;
     }

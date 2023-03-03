@@ -1,13 +1,11 @@
 package org.sterl.svg2png;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.commons.io.IOUtils;
 import org.sterl.svg2png.config.FileOutput;
 import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;
@@ -35,7 +33,7 @@ public enum CliOptions {
     ANDROID_48dp(null, "android-48dp", false, "Android 48dp icons, with suffix _48dp -- mdpi 48x48 -> xxxhdpi 192x192."),
     IOS_ICONS(null, "ios", false, "iOS icons and Contents.json.")
     ;
-    
+
     private final String shortName;
     private final String longName;
     private final boolean hasArg;
@@ -64,7 +62,7 @@ public enum CliOptions {
         final ObjectMapper m = new ObjectMapper();
         if (cmd.hasOption(CONFIG.shortName)) {
             try {
-                result = m.readerFor(OutputConfig.class).readValue(IOUtils.toString(new FileInputStream(FileUtil.newFile(cmd.getOptionValue(CONFIG.shortName)))));
+                result = m.readValue(FileUtil.newFile(cmd.getOptionValue(CONFIG.shortName)), OutputConfig.class);
             } catch (Exception e) {
                 throw new RuntimeException("Failed to parse config '" + cmd.getOptionValue(CONFIG.shortName) + "'. " + e.getMessage(), e);
             }
@@ -130,7 +128,7 @@ public enum CliOptions {
         }
         if (cmd.hasOption(NO_ALPHA.longName)) {
             String bg = getValue(cmd, NO_ALPHA);
-            if (bg == null)
+            if (bg == null || bg.length() <= 5)
                 throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
 
             Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);

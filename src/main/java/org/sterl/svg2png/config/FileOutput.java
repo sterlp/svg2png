@@ -26,7 +26,7 @@ public class FileOutput {
         // if the configured path is absolute we take it, otherwise we append it
         if (directory != null && directory.startsWith(File.separator)) {
             path = directory;
-        } 
+        }
         if (directory != null) {
             if (path.length() > 0) {
                 path += File.separator + directory;
@@ -36,16 +36,16 @@ public class FileOutput {
         }
         // setting the name
         path += File.separator + buildName(FilenameUtils.getBaseName(source.getName()), name != null ? name : outName, namePrefix, nameSuffix);
-        
+
         return FileUtil.newFile(path);
     }
-    
+
     static String buildName(String srcName, String outName, String prefix, String suffix) {
         String name = outName != null ? outName : srcName;
         String result;
         if (prefix != null && !name.startsWith(prefix)) result = prefix + name;
         else result = name;
-        
+
         if (suffix != null && !result.endsWith(suffix)) result += suffix;
         if (!result.endsWith(".png")) result += ".png";
         return result;

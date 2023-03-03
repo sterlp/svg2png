@@ -1,30 +1,40 @@
 package org.sterl.svg2png;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+
 import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sterl.svg2png.config.FileOutput;
 import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;
 
-import javax.imageio.ImageIO;
-
 public class Svg2Png {
 
     private final OutputConfig outCfg;
-    
+
     public Svg2Png(OutputConfig outCfg) {
         super();
         this.outCfg = outCfg;
@@ -37,31 +47,11 @@ public class Svg2Png {
             generated = convertFile(input, outCfg);
         } else {
             File dir = FileUtil.newFile(outCfg.getInputDirectory());
-            @SuppressWarnings("unchecked")
             Collection<File> listFiles = FileUtils.listFiles(dir, new String[]{"svg"}, true);
             generated = new ArrayList<>();
             for (File file : listFiles) {
                 generated.addAll(convertFile(file, outCfg));
             }
-        }
-
-        if (outCfg.isContentsJson()) {
-            String contentsJson;
-
-            try (InputStream stream = Svg2Png.class.getResourceAsStream("/contents.json")) {
-                assert stream != null;
-                Scanner s = new Scanner(stream).useDelimiter("\\A");
-                contentsJson = s.hasNext() ? s.next() : "";
-            }
-
-            contentsJson = contentsJson.replace("?PREFIX?", outCfg.getOutputName());
-
-            File contents = new File(outCfg.getOutputDirectory() + File.separator + "Contents.json");
-            try (PrintWriter out = new PrintWriter(contents)) {
-                out.println(contentsJson);
-            }
-
-            generated.add(contents);
         }
 
         return generated;
@@ -72,10 +62,10 @@ public class Svg2Png {
         final PNGTranscoder t = new PNGTranscoder();
 
         // Disable XXE
-        t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, cfg.isAllowExternalResource()); 
+        t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, cfg.isAllowExternalResource());
         // https://github.com/sterlp/svg2png/issues/11
-        t.addTranscodingHint(PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE, cfg.isForceTransparentWhite());
-        
+        t.addTranscodingHint(ImageTranscoder.KEY_FORCE_TRANSPARENT_WHITE, cfg.isForceTransparentWhite());
+
 
         final List<File> generated = new ArrayList<>();
         final String inputPath = input.getParent();
@@ -102,33 +92,55 @@ public class Svg2Png {
             outputFile.getParentFile().mkdirs();
             outputFile.createNewFile();
 
-            if (cfg.getNoAlpha() == null) {
-                try (FileOutputStream outStream = new FileOutputStream(outputFile)) {
-                    t.transcode(ti, new TranscoderOutput(outStream));
-                    generated.add(outputFile);
-                    String outF = outputFile.getCanonicalPath();
-                    if (inputPath != null && inputPath.length() > 0) outF.replace(inputPath, "");
-                    info.append("\t").append(outF);
-                }
-            } else {
-                try (ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
-                    t.transcode(ti, new TranscoderOutput(outStream));
 
-                    byte[] bytes = outStream.toByteArray();
-                    removeAlpha(bytes, outputFile, Color.decode("#" + cfg.getNoAlpha()));
+            try (ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
+                t.transcode(ti, new TranscoderOutput(outStream));
 
-                    generated.add(outputFile);
-                    String outF = outputFile.getCanonicalPath();
-                    if (inputPath != null && inputPath.length() > 0) outF.replace(inputPath, "");
-                    info.append("\t").append(outF);
+                if (cfg.getNoAlpha() == null) {
+                    IOUtils.write(outStream.toByteArray(), new FileOutputStream(outputFile));
+                } else {
+                    replaceAlphaBackground(outStream.toByteArray(), outputFile, Color.decode("#" + cfg.getNoAlpha()));
                 }
+
+                generated.add(outputFile);
+                String outF = outputFile.getCanonicalPath();
+                if (inputPath != null && inputPath.length() > 0) outF.replace(inputPath, "");
+                info.append("\t").append(outF);
             }
+
+
             System.out.println(info.toString());
         }
+
+        if (cfg.isContentsJson()) {
+            final File contents = generateIOSContentJson(cfg);
+            generated.add(contents);
+            System.out.println("Generated iOS " + contents.getCanonicalPath());
+        }
+
         return generated;
     }
 
-    private static void removeAlpha(byte[] inputBytes, File outputFile, Color background) throws java.io.IOException {
+    private static File generateIOSContentJson(OutputConfig cfg) throws IOException, FileNotFoundException {
+        String contentsJson;
+
+        try (InputStream stream = Svg2Png.class.getResourceAsStream("/contents.json")) {
+            assert stream != null;
+            try (Scanner s = new Scanner(stream).useDelimiter("\\A")) {
+                contentsJson = s.hasNext() ? s.next() : "";
+            }
+        }
+
+        contentsJson = contentsJson.replace("?PREFIX?", cfg.getOutputName());
+
+        final File contents = new File(cfg.getOutputDirectory() + File.separator + "Contents.json");
+        try (PrintWriter out = new PrintWriter(contents)) {
+            out.println(contentsJson);
+        }
+        return contents;
+    }
+
+    private static void replaceAlphaBackground(byte[] inputBytes, File outputFile, final Color newBackground) throws java.io.IOException {
         try (ByteArrayInputStream sourceStream = new ByteArrayInputStream(inputBytes)) {
             BufferedImage sourceImage = ImageIO.read(sourceStream);
 
@@ -137,12 +149,14 @@ public class Svg2Png {
 
             // Draw source onto dest canvas
             Graphics2D g2d = destImage.createGraphics();
-            g2d.setColor(background);
+            g2d.setColor(newBackground);
             g2d.fillRect(0, 0, destImage.getWidth(), destImage.getHeight());
             g2d.drawImage(sourceImage, 0, 0, null);
             g2d.dispose();
 
-            ImageIO.write(destImage, "png", outputFile);
+            if (!ImageIO.write(destImage, "png", outputFile)) {
+                throw new RuntimeException("No image writer found in Graphics2D, cannot replace the background!");
+            };
         }
     }
 }
