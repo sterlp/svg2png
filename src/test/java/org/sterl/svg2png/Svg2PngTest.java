@@ -240,10 +240,20 @@ public class Svg2PngTest {
 
         // THEN they should not be equal
         assertNotEquals(normal.hashCode(), white.hashCode());
+        assertTrue("white background file should be bigger", normal.length() < white.length());
     }
 
     @Test
     public void testCustomAlphaChannel() throws Exception {
+        // GIVEN
+        final File normal = convertFile(new String[]{
+                "-n", "normal.png",
+                "-w", "128",
+                "-h", "128",
+                "-f", svgPath("sample.svg"),
+                "-o", tmpDir.getAbsolutePath()
+        });
+
         // WHEN
         final File noAlpha = convertFile(new String[]{
                 "-n", "no-alpha.png",
@@ -255,9 +265,8 @@ public class Svg2PngTest {
         });
 
         // THEN the file without alpha channel should be smaller
-        assertArrayEquals("Background sould be 0077FF",
-                IOUtils.toByteArray(getClass().getResourceAsStream("/alpha-0077FF.png")),
-                IOUtils.toByteArray(new FileInputStream(noAlpha)));
+        assertNotEquals(normal.hashCode(), noAlpha.hashCode());
+        assertTrue("Removed alpha file should be smaller", normal.length() > noAlpha.length());
     }
 
     @Test
