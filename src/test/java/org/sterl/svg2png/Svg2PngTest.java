@@ -1,8 +1,10 @@
 package org.sterl.svg2png;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
@@ -260,10 +262,9 @@ public class Svg2PngTest {
 
         // THEN the file without alpha channel should be smaller
         assertTrue(normal.length() > noAlpha.length());
-        assertTrue("Background sould be 0077FF",
-                IOUtils.contentEquals(
-                        new FileInputStream(noAlpha), 
-                        getClass().getResourceAsStream("/alpha-0077FF.png")));
+        assertArrayEquals("Background sould be 0077FF",
+                IOUtils.toByteArray(getClass().getResourceAsStream("/alpha-0077FF.png")),
+                IOUtils.toByteArray(new FileInputStream(noAlpha)));
     }
 
     @Test
