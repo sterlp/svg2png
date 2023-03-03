@@ -223,6 +223,69 @@ public class Svg2PngTest {
         // THEN they should not be equal
         assertNotEquals(normal.hashCode(), white.hashCode());
     }
+
+    @Test
+    public void testAlphaChannelRemoval() throws Exception {
+        // GIVEN
+        final File normal = convertFile(new String[]{
+                "-n", "normal.png",
+                "-f", svgPath("sample.svg")
+        });
+
+        // WHEN
+        final File noAlpha = convertFile(new String[]{
+                "-n", "no-alpha.png",
+                "-f", svgPath("sample.svg"),
+                "--no-alpha", "0077ff"
+        });
+
+        // THEN the file without alpha channel should be smaller
+        assertTrue(normal.length() > noAlpha.length());
+    }
+
+    @Test
+    public void testIosIcons() throws Exception {
+        List<File> files = Main.run(new String[] {
+                "-f", svgPath("sample.svg"),
+                "--ios",
+                "-n", "sample-ios",
+                "-o", tmpDir.getAbsolutePath()
+        });
+        assertEquals(16, files.size());
+    }
+
+    @Test
+    public void testRequireNameWithIos() throws Exception {
+        Svg2PngException ex = assertThrows(Svg2PngException.class, () ->
+                Main.run(new String[] {
+                        "-f", svgPath("sample.svg"),
+                        "--ios",
+                        "-o", tmpDir.getAbsolutePath()
+                })
+        );
+        Throwable exception = ex.getCause();
+        System.err.println(exception.getMessage());
+        assertEquals(
+                "-n name must be specified when --ios is used.",
+                exception.getMessage());
+    }
+
+    @Test
+    public void testInvalidBackground() throws Exception {
+        Svg2PngException ex = assertThrows(Svg2PngException.class, () ->
+                Main.run(new String[] {
+                        "-f", svgPath("sample.svg"),
+                        "--no-alpha", "zzz",
+                        "-o", tmpDir.getAbsolutePath()
+                })
+        );
+        Throwable exception = ex.getCause();
+        System.err.println(exception.getMessage());
+        assertEquals(
+                "Background must be specified as hex triplet e.g. --no-alpha 2a5c8b",
+                exception.getMessage());
+    }
+
     private String svgPath(String file) throws URISyntaxException {
         return getClass().getResource("/svgfolder/" + file).toString();
     }

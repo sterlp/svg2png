@@ -1,12 +1,12 @@
 package org.sterl.svg2png.config;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.InputStream;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static org.junit.Assert.*;
 
 public class TestFileConfigParsing {
 
@@ -39,11 +39,26 @@ public class TestFileConfigParsing {
         ObjectMapper m = new ObjectMapper();
         try (InputStream is = getClass().getResourceAsStream("/android-icon.json")) {
             OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
-            
+
             assertEquals(5, config.getFiles().size());
             assertEquals(192, config.getFiles().get(0).getHeight());
             assertEquals(192, config.getFiles().get(0).getWidth());
             assertEquals("drawable-xxxhdpi", config.getFiles().get(0).getDirectory());
+        }
+    }
+
+    @Test
+    public void testIos() throws Exception {
+        ObjectMapper m = new ObjectMapper();
+        try (InputStream is = getClass().getResourceAsStream("/ios.json")) {
+            OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
+
+            assertEquals(15, config.getFiles().size());
+            assertEquals(20, config.getFiles().get(0).getHeight());
+            assertEquals(20, config.getFiles().get(0).getWidth());
+            assertEquals("ffffff", config.getNoAlpha());
+            assertTrue(config.isContentsJson());
+            assertNull(config.getFiles().get(0).getDirectory());
         }
     }
     

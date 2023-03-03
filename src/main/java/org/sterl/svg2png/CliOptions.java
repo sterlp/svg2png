@@ -2,6 +2,8 @@ package org.sterl.svg2png;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -21,16 +23,17 @@ public enum CliOptions {
     HEIGHT("h", null, true, "Height of the output file."),
     CONFIG("c", null, true, "JSON Config file for the file output."),
     ALLOW_EXTERNAL("e", "allow-external", false, "Allow external entities to be loaded by the SVG."),
+    NO_ALPHA("a", "no-alpha", true, "Saves PNG without alpha channel and with specified background hex triplet. (Needed for iOS assets.)"),
 
-    FORCE_TRANCPARENT_WHITE(null, "transparent-white", false, "This is a trick so that viewers which do not support the alpha channel will see a white background (and not a black one)."),
-
+    FORCE_TRANSPARENT_WHITE(null, "transparent-white", false, "This is a trick so that viewers which do not support the alpha channel will see a white background (and not a black one)."),
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_LAUNCH(null, "android-launch", false, "Android Launcher Icon config mdpi 48x48 -> xxxhdpi 192x192."),
     ANDROID_ICON(null, "android-icon", false, "Android Icon (Action Bar, Dialog etc.)  config mdpi 36x36 -> xxxhdpi 128x128."),
     ANDROID_SMALL(null, "android-small", false, "Android Small default config from mdpi 24x24 -> xxxhdpi 96x96."),
     ANDROID_24dp(null, "android-24dp", false, "Android 24dp icons, with suffix _24dp -- mdpi 24x24 -> xxxhdpi 96x96."),
     ANDROID_36dp(null, "android-36dp", false, "Android 36dp icons, with suffix _36dp -- mdpi 36x36 -> xxxhdpi 144x144."),
-    ANDROID_48dp(null, "android-48dp", false, "Android 48dp icons, with suffix _48dp -- mdpi 48x48 -> xxxhdpi 192x192.")
+    ANDROID_48dp(null, "android-48dp", false, "Android 48dp icons, with suffix _48dp -- mdpi 48x48 -> xxxhdpi 192x192."),
+    IOS_ICONS(null, "ios", false, "iOS icons and Contents.json.")
     ;
     
     private final String shortName;
@@ -107,14 +110,35 @@ public enum CliOptions {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        } else if (cmd.hasOption(IOS_ICONS.longName)) {
+            if (!cmd.hasOption(NAME.shortName))
+                throw new RuntimeException("-n name must be specified when --ios is used.");
+
+            try {
+                result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/ios.json"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         } else {
             result = new OutputConfig();
         }
         if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
             result.setAllowExternalResource(true);
         }
-        if (cmd.hasOption(FORCE_TRANCPARENT_WHITE.longName)) {
+        if (cmd.hasOption(FORCE_TRANSPARENT_WHITE.longName)) {
             result.setForceTransparentWhite(true);
+        }
+        if (cmd.hasOption(NO_ALPHA.longName)) {
+            String bg = getValue(cmd, NO_ALPHA);
+            if (bg == null)
+                throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
+
+            Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
+            Matcher matcher = pattern.matcher(bg);
+            if (!matcher.find())
+                throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
+
+            result.setNoAlpha(bg);
         }
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));

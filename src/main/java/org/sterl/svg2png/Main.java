@@ -53,7 +53,7 @@ public class Main {
             
             // validation
             if (!cfg.hasDirectoryOrFile() || (cfg.getInputDirectory() != null && cfg.getInputFile() != null)) {
-                throw new IllegalArgumentException("Pleace specify either a directory or a file to convert!");
+                throw new IllegalArgumentException("Please specify either a directory or a file to convert!");
             } else if (cfg.getInputFile() != null) {
                 File f = FileUtil.newFile(cfg.getInputFile());
                 if (!f.exists()) throw new IllegalArgumentException("File '" + cfg.getInputFile() + "' not found!");
@@ -89,18 +89,21 @@ public class Main {
         System.out.println("---------");
         System.out.println("# just convert a file");
         System.out.println("svg2png foo.svg");
-        System.out.println("");
+        System.out.println();
         System.out.println("# generate a PNG with a name");
         System.out.println("svg2png -f foo.svg -n bar.png");
-        System.out.println("");
+        System.out.println();
         System.out.println("# convert all file in a directory");
-        System.out.println("svg2png -d /Picures/icons/svg -o /Pictures/icons/png");
-        System.out.println("");
+        System.out.println("svg2png -d /Pictures/icons/svg -o /Pictures/icons/png");
+        System.out.println();
         System.out.println("# convert with a JSON configuration");
         System.out.println("svg2png -d . -c my.json");
-        System.out.println("");
+        System.out.println();
         System.out.println("# convert SVG files using the default Android configuration");
         System.out.println("svg2png -d . -o /dev/workset/android-project/app/src/main/res --android");
+        System.out.println();
+        System.out.println("# convert SVG to iOS icons with an orange background");
+        System.out.println("svg2png -f foo.svg -n bar -o icons --ios --no-alpha ffbd33");
     }
 
 }
