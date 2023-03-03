@@ -6,7 +6,7 @@
     <groupId>org.sterl.svg2png</groupId>
     <artifactId>svg2png</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <url>https://github.com/sterlp/svg2png</url>
 
     <inceptionYear>2015</inceptionYear>

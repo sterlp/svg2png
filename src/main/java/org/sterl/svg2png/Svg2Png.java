@@ -22,6 +22,7 @@ import org.apache.batik.transcoder.SVGAbstractTranscoder;
 import org.apache.batik.transcoder.TranscoderException;
 import org.apache.batik.transcoder.TranscoderInput;
 import org.apache.batik.transcoder.TranscoderOutput;
+import org.apache.batik.transcoder.TranscodingHints;
 import org.apache.batik.transcoder.image.ImageTranscoder;
 import org.apache.batik.transcoder.image.PNGTranscoder;
 import org.apache.commons.io.FileUtils;
@@ -73,24 +74,13 @@ public class Svg2Png {
 
         for (FileOutput out : cfg.getFiles()) {
             info.setLength(0);
-            info.append(input.getName());
+            info.append(StringUtils.rightPad(input.getName(), 12));
 
-            if (out.getWidth() > 0) {
-                t.addTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH, Float.valueOf(out.getWidth()));
-                info.append(StringUtils.leftPad(" w"+ out.getWidth(), 5));
-            } else t.removeTranscodingHint(SVGAbstractTranscoder.KEY_WIDTH);
+            setSizeHint(SVGAbstractTranscoder.KEY_WIDTH, out.getWidth(), t, info);
+            setSizeHint(SVGAbstractTranscoder.KEY_HEIGHT, out.getHeight(), t, info);
 
-            if (out.getHeight() > 0) {
-                t.addTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT, Float.valueOf(out.getHeight()));
-                info.append(StringUtils.leftPad(" h"+out.getHeight(), 5));
-            } else t.removeTranscodingHint(SVGAbstractTranscoder.KEY_HEIGHT);
-
-            File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());
-            if (outputFile.exists()) {
-                outputFile.delete();
-            }
-            outputFile.getParentFile().mkdirs();
-            outputFile.createNewFile();
+            final File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());
+            FileUtil.recreateNewFile(outputFile);
 
 
             try (ByteArrayOutputStream outStream = new ByteArrayOutputStream()) {
@@ -119,6 +109,13 @@ public class Svg2Png {
         }
 
         return generated;
+    }
+
+    private static void setSizeHint(TranscodingHints.Key hint, int size,  final PNGTranscoder t, final StringBuilder info) {
+        if (size > 0) {
+            t.addTranscodingHint(hint, Float.valueOf(size));
+            info.append(StringUtils.rightPad((SVGAbstractTranscoder.KEY_WIDTH == hint ? " w" : " h") + size, 6));
+        } else t.removeTranscodingHint(hint);
     }
 
     private static File generateIOSContentJson(OutputConfig cfg) throws IOException, FileNotFoundException {
