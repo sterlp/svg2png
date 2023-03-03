@@ -95,27 +95,27 @@ java -jar svg2png
                                 background (and not a black one).
         -w <arg>                 Width of the output file.
 
-Examples:
----------
-# just convert a file
-svg2png foo.svg
+## Examples
 
-# generate a PNG with a name
-svg2png -f foo.svg -n bar.png
+### just convert a file
+`svg2png foo.svg`
 
-# convert all file in a directory
+### generate a PNG with a name
+`svg2png -f foo.svg -n bar.png`
+
+### convert all file in a directory
 svg2png -d /Picures/icons/svg -o /Pictures/icons/png
 
-# convert with a JSON configuration
-svg2png -d . -c my.json
+### convert with a JSON configuration
+`svg2png -d . -c my.json`
 
-# convert SVG files using the default Android configuration
-svg2png -d . -o /dev/workset/android-project/app/src/main/res --android
+### convert SVG files using the default Android configuration
+`svg2png -d . -o /dev/workset/android-project/app/src/main/res --android`
 
-# convert SVG to iOS icons with an orange background
-svg2png -f foo.svg -n bar -o icons --ios --no-alpha ffbd33
+### convert SVG to iOS icons with an orange background
+`svg2png -f foo.svg -n bar -o icons --ios --no-alpha ffbd33`
 
-## JSON Android Config Sample
+### JSON Android Config Sample
 
 ```JSON
 {
