@@ -98,7 +98,6 @@ public class Svg2Png {
                 info.append("\t").append(outF);
             }
 
-
             System.out.println(info.toString());
         }
 

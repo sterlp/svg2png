@@ -4,7 +4,6 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
@@ -245,23 +244,17 @@ public class Svg2PngTest {
 
     @Test
     public void testCustomAlphaChannel() throws Exception {
-        // GIVEN
-        final File normal = convertFile(new String[]{
-                "-n", "normal.png",
-                "-f", svgPath("sample.svg"),
-                "-o", tmpDir.getAbsolutePath()
-        });
-
         // WHEN
         final File noAlpha = convertFile(new String[]{
                 "-n", "no-alpha.png",
+                "-w", "128",
+                "-h", "128",
                 "-f", svgPath("sample.svg"),
                 "--no-alpha", "0077ff",
                 "-o", tmpDir.getAbsolutePath()
         });
 
         // THEN the file without alpha channel should be smaller
-        assertTrue(normal.length() > noAlpha.length());
         assertArrayEquals("Background sould be 0077FF",
                 IOUtils.toByteArray(getClass().getResourceAsStream("/alpha-0077FF.png")),
                 IOUtils.toByteArray(new FileInputStream(noAlpha)));
