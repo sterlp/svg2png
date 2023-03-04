@@ -6,7 +6,7 @@
     <groupId>org.sterl.svg2png</groupId>
     <artifactId>svg2png</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0</version>
+    <version>1.2.0-SNAPSHOT</version>
     <url>https://github.com/sterlp/svg2png</url>
 
     <inceptionYear>2015</inceptionYear>
@@ -103,6 +103,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.romankh3</groupId>
+            <artifactId>image-comparison</artifactId>
+            <version>4.4.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

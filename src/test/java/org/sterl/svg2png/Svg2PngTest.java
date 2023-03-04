@@ -1,6 +1,5 @@
 package org.sterl.svg2png;
 
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -8,6 +7,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -19,10 +19,14 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.sterl.svg2png.config.OutputConfig;
+
+import com.github.romankh3.image.comparison.ImageComparison;
+import com.github.romankh3.image.comparison.ImageComparisonUtil;
+import com.github.romankh3.image.comparison.model.ImageComparisonResult;
+import com.github.romankh3.image.comparison.model.ImageComparisonState;
 
 public class Svg2PngTest {
 
@@ -33,7 +37,7 @@ public class Svg2PngTest {
         tmpDir.mkdirs();
         tmpDir.deleteOnExit();
     }
-    @AfterClass
+    //@AfterClass
     public static void after() throws Exception {
         clean();
     }
@@ -52,14 +56,28 @@ public class Svg2PngTest {
 
     @Test
     public void testConversionOfOneFile() throws Exception {
+    	// GIVEN
         OutputConfig cfg = OutputConfig.fromPath(svgPath("sample.svg"));
+        cfg.applyOutputSize(128, 128);
 
+        // WHEN
         List<File> convert = new Svg2Png(cfg).convert();
-        System.out.println(convert);
+        //convert.get(0).deleteOnExit();
+        
+        // THEN
         assertEquals(1, convert.size());
         assertTrue(convert.get(0).exists());
         assertTrue(convert.get(0).isFile());
         assertTrue(convert.get(0).getTotalSpace() > 1);
+        
+        BufferedImage expectedImage = ImageComparisonUtil.readImageFromResources("normal_128x128.png");
+        BufferedImage actualImage = ImageComparisonUtil.readImageFromResources(convert.get(0).getAbsolutePath());
+
+        //Create ImageComparison object and compare the images.
+        ImageComparisonResult imageComparisonResult = new ImageComparison(expectedImage, actualImage).compareImages();
+        
+        //Check the result
+        assertEquals(ImageComparisonState.MATCH, imageComparisonResult.getImageComparisonState());
 
         convert.get(0).delete();
     }
@@ -329,7 +347,7 @@ public class Svg2PngTest {
 
     private static File convertFile(String[] args) throws Svg2PngException, URISyntaxException {
         List<File> files = Main.run(args);
-        for (File file : files) file.deleteOnExit();
+        //for (File file : files) file.deleteOnExit();
         assertEquals(1, files.size());
         return files.get(0);
     }

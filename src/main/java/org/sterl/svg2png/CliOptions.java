@@ -22,6 +22,7 @@ public enum CliOptions {
     CONFIG("c", null, true, "JSON Config file for the file output."),
     ALLOW_EXTERNAL("e", "allow-external", false, "Allow external entities to be loaded by the SVG."),
     NO_ALPHA("a", "no-alpha", true, "Saves PNG without alpha channel and with specified background hex triplet. (Needed for iOS assets.)"),
+    BACKGROUND_COLOR(null, "background-color", true, "Provide a custom background color to use for opaque image formats e.g. 0077FF."),
 
     FORCE_TRANSPARENT_WHITE(null, "transparent-white", false, "This is a trick so that viewers which do not support the alpha channel will see a white background (and not a black one)."),
     ANDROID(null, "android", false, "Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192."),
@@ -53,12 +54,69 @@ public enum CliOptions {
     }
 
     private static String getValue(CommandLine cmd, CliOptions option) {
-        if (cmd.hasOption(option.shortName)) return cmd.getOptionValue(option.shortName);
-        else return null;
+    	if (option.shortName == null) return cmd.getOptionValue(option.longName);
+    	else return cmd.getOptionValue(option.shortName);
     }
 
     public static OutputConfig parse(CommandLine cmd) {
-        OutputConfig result;
+        OutputConfig result = selectPredefinedJsonConfig(cmd);
+        
+        
+        if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
+            result.setAllowExternalResource(true);
+        }
+        if (cmd.hasOption(FORCE_TRANSPARENT_WHITE.longName)) {
+            result.setForceTransparentWhite(true);
+        }
+        if (cmd.hasOption(NO_ALPHA.longName)) {
+            String bg = getValue(cmd, NO_ALPHA);
+            validateColor(bg, NO_ALPHA.longName);
+            result.setNoAlpha(bg);
+        }
+        if (cmd.hasOption(BACKGROUND_COLOR.longName)) {
+        	String color = getValue(cmd, BACKGROUND_COLOR);
+        	validateColor(color, BACKGROUND_COLOR.longName);
+            result.setBackgroundColor(color);
+        }
+        
+        result.setInputFile(getValue(cmd, FILE));
+        result.setInputDirectory(getValue(cmd, FOLDER));
+        result.setOutputName(getValue(cmd, NAME));
+        result.setOutputDirectory(getValue(cmd, OUTPUT));
+        if (result.getOutputDirectory() == null) {
+            result.setOutputDirectory(new File(".").getAbsolutePath());
+        }
+
+        for (FileOutput f : result.getFiles()) {
+            f.setName(getValue(cmd, NAME));
+        }
+
+        if (result.getFiles().isEmpty()) {
+            FileOutput out = new FileOutput();
+            if (cmd.hasOption(WIDTH.shortName)) {
+                out.setWidth(Integer.parseInt(getValue(cmd, WIDTH)));
+            }
+            if (cmd.hasOption(HEIGHT.shortName)) {
+                out.setHeight(Integer.parseInt(getValue(cmd, HEIGHT)));
+            }
+            result.getFiles().add(out);
+        }
+
+        return result;
+    }
+
+	private static void validateColor(String color, String name) {
+		if (color == null || color.length() <= 5)
+		    throw new RuntimeException("Background must be specified as hex triplet e.g. " + name + " 2a5c8b");
+
+		final Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
+		final Matcher matcher = pattern.matcher(color);
+		if (!matcher.find())
+		    throw new RuntimeException("Background must be specified as hex triplet e.g. " + name + " 2a5c8b");
+	}
+
+	private static OutputConfig selectPredefinedJsonConfig(CommandLine cmd) {
+		OutputConfig result;
         final ObjectMapper m = new ObjectMapper();
         if (cmd.hasOption(CONFIG.shortName)) {
             try {
@@ -120,47 +178,6 @@ public enum CliOptions {
         } else {
             result = new OutputConfig();
         }
-        if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
-            result.setAllowExternalResource(true);
-        }
-        if (cmd.hasOption(FORCE_TRANSPARENT_WHITE.longName)) {
-            result.setForceTransparentWhite(true);
-        }
-        if (cmd.hasOption(NO_ALPHA.longName)) {
-            String bg = getValue(cmd, NO_ALPHA);
-            if (bg == null || bg.length() <= 5)
-                throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
-
-            Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
-            Matcher matcher = pattern.matcher(bg);
-            if (!matcher.find())
-                throw new RuntimeException("Background must be specified as hex triplet e.g. --no-alpha 2a5c8b");
-
-            result.setNoAlpha(bg);
-        }
-        result.setInputFile(getValue(cmd, FILE));
-        result.setInputDirectory(getValue(cmd, FOLDER));
-        result.setOutputName(getValue(cmd, NAME));
-        result.setOutputDirectory(getValue(cmd, OUTPUT));
-        if (result.getOutputDirectory() == null) {
-            result.setOutputDirectory(new File(".").getAbsolutePath());
-        }
-
-        for (FileOutput f : result.getFiles()) {
-            f.setName(getValue(cmd, NAME));
-        }
-
-        if (result.getFiles().isEmpty()) {
-            FileOutput out = new FileOutput();
-            if (cmd.hasOption(WIDTH.shortName)) {
-                out.setWidth(Integer.parseInt(getValue(cmd, WIDTH)));
-            }
-            if (cmd.hasOption(HEIGHT.shortName)) {
-                out.setHeight(Integer.parseInt(getValue(cmd, HEIGHT)));
-            }
-            result.getFiles().add(out);
-        }
-
-        return result;
-    }
+		return result;
+	}
 }

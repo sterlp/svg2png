@@ -23,6 +23,7 @@ public class OutputConfig {
     private boolean allowExternalResource = false;
     private boolean forceTransparentWhite = false;
     private String noAlpha = null;
+    private String backgroundColor = null;
     private boolean contentsJson = false;
 
     private List<FileOutput> files = new ArrayList<>();
@@ -47,5 +48,16 @@ public class OutputConfig {
 
     public boolean hasDirectoryOrFile() {
         return inputFile != null || inputDirectory != null;
+    }
+
+    public boolean hasBackgroundColor() {
+        return backgroundColor != null && backgroundColor.length() > 0;
+    }
+
+    public void applyOutputSize(int width, int height) {
+        for (FileOutput fileOutput : files) {
+            fileOutput.setWidth(width);
+            fileOutput.setHeight(height);
+        }
     }
 }
