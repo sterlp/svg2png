@@ -62,7 +62,7 @@ public class Svg2PngTest {
 
         // WHEN
         List<File> convert = new Svg2Png(cfg).convert();
-        //convert.get(0).deleteOnExit();
+        convert.get(0).deleteOnExit();
         
         // THEN
         assertEquals(1, convert.size());

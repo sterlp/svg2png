@@ -90,13 +90,13 @@ public class Main {
         System.out.println("# just convert a file");
         System.out.println("svg2png foo.svg");
         System.out.println();
-        System.out.println("# generate a PNG with a name");
+        System.out.println("# generate a PNG with a custom name");
         System.out.println("svg2png -f foo.svg -n bar.png");
         System.out.println();
         System.out.println("# convert all file in a directory");
         System.out.println("svg2png -d /Pictures/icons/svg -o /Pictures/icons/png");
         System.out.println();
-        System.out.println("# convert with a JSON configuration");
+        System.out.println("# convert a directory with a JSON configuration");
         System.out.println("svg2png -d . -c my.json");
         System.out.println();
         System.out.println("# convert SVG files using the default Android configuration");

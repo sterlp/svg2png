@@ -54,8 +54,8 @@ public enum CliOptions {
     }
 
     private static String getValue(CommandLine cmd, CliOptions option) {
-    	if (option.shortName == null) return cmd.getOptionValue(option.longName);
-    	else return cmd.getOptionValue(option.shortName);
+        if (option.shortName == null) return cmd.getOptionValue(option.longName);
+        else return cmd.getOptionValue(option.shortName);
     }
 
     public static OutputConfig parse(CommandLine cmd) {
@@ -70,12 +70,12 @@ public enum CliOptions {
         }
         if (cmd.hasOption(NO_ALPHA.longName)) {
             String bg = getValue(cmd, NO_ALPHA);
-            validateColor(bg, NO_ALPHA.longName);
+            validateColor(bg, "--" + NO_ALPHA.longName);
             result.setNoAlpha(bg);
         }
         if (cmd.hasOption(BACKGROUND_COLOR.longName)) {
-        	String color = getValue(cmd, BACKGROUND_COLOR);
-        	validateColor(color, BACKGROUND_COLOR.longName);
+            String color = getValue(cmd, BACKGROUND_COLOR);
+            validateColor(color, "--" + BACKGROUND_COLOR.longName);
             result.setBackgroundColor(color);
         }
         
@@ -105,18 +105,18 @@ public enum CliOptions {
         return result;
     }
 
-	private static void validateColor(String color, String name) {
-		if (color == null || color.length() <= 5)
-		    throw new RuntimeException("Background must be specified as hex triplet e.g. " + name + " 2a5c8b");
+    private static void validateColor(String color, String name) {
+        if (color == null || color.length() <= 5)
+            throw new RuntimeException("Background must be specified as hex triplet e.g. " + name + " 2a5c8b");
 
-		final Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
-		final Matcher matcher = pattern.matcher(color);
-		if (!matcher.find())
-		    throw new RuntimeException("Background must be specified as hex triplet e.g. " + name + " 2a5c8b");
-	}
+        final Pattern pattern = Pattern.compile("[0-9a-f]{6}", Pattern.CASE_INSENSITIVE);
+        final Matcher matcher = pattern.matcher(color);
+        if (!matcher.find())
+            throw new RuntimeException("Background must be specified as hex triplet e.g. " + name + " 2a5c8b");
+    }
 
-	private static OutputConfig selectPredefinedJsonConfig(CommandLine cmd) {
-		OutputConfig result;
+    private static OutputConfig selectPredefinedJsonConfig(CommandLine cmd) {
+        OutputConfig result;
         final ObjectMapper m = new ObjectMapper();
         if (cmd.hasOption(CONFIG.shortName)) {
             try {
@@ -178,6 +178,6 @@ public enum CliOptions {
         } else {
             result = new OutputConfig();
         }
-		return result;
-	}
+        return result;
+    }
 }
