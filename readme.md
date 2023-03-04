@@ -34,7 +34,7 @@ Batik SVG Toolkit isn't supported by android because of the missing [Java2D API]
 | --- | –------- | --------- | ---------- | ---------------- |
 | w   | width    |  width    |  **file**  | Image width      |
 | h   | height   |  height   |  **file**  | Image height     |
-|    | background-color   |  backgroundColor   |  **file**  | alternative color |
+|     | background-color   |  backgroundColor   |  **file**  | alternative color |
 
 ## CLI Usage
 
