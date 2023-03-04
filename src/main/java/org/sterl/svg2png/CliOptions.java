@@ -73,11 +73,6 @@ public enum CliOptions {
             validateColor(bg, "--" + NO_ALPHA.longName);
             result.setNoAlpha(bg);
         }
-        if (cmd.hasOption(BACKGROUND_COLOR.longName)) {
-            String color = getValue(cmd, BACKGROUND_COLOR);
-            validateColor(color, "--" + BACKGROUND_COLOR.longName);
-            result.setBackgroundColor(color);
-        }
         
         result.setInputFile(getValue(cmd, FILE));
         result.setInputDirectory(getValue(cmd, FOLDER));
@@ -87,22 +82,31 @@ public enum CliOptions {
             result.setOutputDirectory(new File(".").getAbsolutePath());
         }
 
-        for (FileOutput f : result.getFiles()) {
-            f.setName(getValue(cmd, NAME));
-        }
+        if (result.getFiles().isEmpty()) result.newOutput();
+        
+        result.applyFileName(getValue(cmd, NAME));
 
-        if (result.getFiles().isEmpty()) {
-            FileOutput out = new FileOutput();
-            if (cmd.hasOption(WIDTH.shortName)) {
-                out.setWidth(Integer.parseInt(getValue(cmd, WIDTH)));
-            }
-            if (cmd.hasOption(HEIGHT.shortName)) {
-                out.setHeight(Integer.parseInt(getValue(cmd, HEIGHT)));
-            }
-            result.getFiles().add(out);
+        applyWidthAndHeigth(cmd, result);
+        
+        if (cmd.hasOption(BACKGROUND_COLOR.longName)) {
+            String color = getValue(cmd, BACKGROUND_COLOR);
+            validateColor(color, "--" + BACKGROUND_COLOR.longName);
+            result.applyBackgroundColor(color);
         }
 
         return result;
+    }
+
+    private static void applyWidthAndHeigth(CommandLine cmd, OutputConfig out) {
+        int width = -1;
+        int height = -1;
+        if (cmd.hasOption(WIDTH.shortName)) {
+            width = Integer.parseInt(getValue(cmd, WIDTH));
+        }
+        if (cmd.hasOption(HEIGHT.shortName)) {
+            height = Integer.parseInt(getValue(cmd, HEIGHT));
+        }
+        out.applyOutputSize(width, height);
     }
 
     private static void validateColor(String color, String name) {

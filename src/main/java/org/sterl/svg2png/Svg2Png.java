@@ -78,8 +78,8 @@ public class Svg2Png {
 
             setSizeHint(SVGAbstractTranscoder.KEY_WIDTH, out.getWidth(), t, info);
             setSizeHint(SVGAbstractTranscoder.KEY_HEIGHT, out.getHeight(), t, info);
-            if (cfg.hasBackgroundColor()) {            	
-                t.addTranscodingHint(PNGTranscoder.KEY_BACKGROUND_COLOR, Color.decode("#" + cfg.getBackgroundColor()));
+            if (out.hasBackgroundColor()) {            	
+                t.addTranscodingHint(PNGTranscoder.KEY_BACKGROUND_COLOR, Color.decode("#" + out.getBackgroundColor()));
             }
 
             final File outputFile = out.toOutputFile(input, cfg.getOutputDirectory(), cfg.getOutputName());

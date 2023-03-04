@@ -18,6 +18,7 @@ public class FileOutput {
     private String directory;
     private String nameSuffix;
     private String namePrefix;
+    private String backgroundColor = null;
 
     public File toOutputFile(File source, String basePath, String outName) {
         // either a set path or the one of the parent
@@ -49,5 +50,9 @@ public class FileOutput {
         if (suffix != null && !result.endsWith(suffix)) result += suffix;
         if (!result.endsWith(".png")) result += ".png";
         return result;
+    }
+    
+    public boolean hasBackgroundColor() {
+        return backgroundColor != null && backgroundColor.length() > 0;
     }
 }

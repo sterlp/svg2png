@@ -19,6 +19,7 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.sterl.svg2png.config.OutputConfig;
@@ -36,8 +37,12 @@ public class Svg2PngTest {
     public void before() throws IOException {
         tmpDir.mkdirs();
         tmpDir.deleteOnExit();
+        Collection<File> files = FileUtils.listFiles(tmpDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+        for (File file : files) {
+            file.delete();
+        }
     }
-    //@AfterClass
+    @AfterClass
     public static void after() throws Exception {
         clean();
     }
@@ -48,6 +53,7 @@ public class Svg2PngTest {
             System.err.println("TEST: Failed to clean " + tmpDir + " -> " + e.getCause().getMessage());
             Collection<File> files = FileUtils.listFiles(tmpDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
             for (File file : files) {
+                file.delete();
                 file.deleteOnExit();
             }
             tmpDir.deleteOnExit();
@@ -70,14 +76,7 @@ public class Svg2PngTest {
         assertTrue(convert.get(0).isFile());
         assertTrue(convert.get(0).getTotalSpace() > 1);
         
-        BufferedImage expectedImage = ImageComparisonUtil.readImageFromResources("normal_128x128.png");
-        BufferedImage actualImage = ImageComparisonUtil.readImageFromResources(convert.get(0).getAbsolutePath());
-
-        //Create ImageComparison object and compare the images.
-        ImageComparisonResult imageComparisonResult = new ImageComparison(expectedImage, actualImage).compareImages();
-        
-        //Check the result
-        assertEquals(ImageComparisonState.MATCH, imageComparisonResult.getImageComparisonState());
+        assertEqualImages("normal-128x128.png", convert.get(0).getAbsolutePath());
 
         convert.get(0).delete();
     }
@@ -326,7 +325,7 @@ public class Svg2PngTest {
     }
 
     @Test
-    public void testInvalidBackground() throws Exception {
+    public void testInvalidNoAlphaBackground() throws Exception {
         Svg2PngException ex = assertThrows(Svg2PngException.class, () ->
                 Main.run(new String[] {
                         "-f", svgPath("sample.svg"),
@@ -340,14 +339,41 @@ public class Svg2PngTest {
                 "Background must be specified as hex triplet e.g. --no-alpha 2a5c8b",
                 exception.getMessage());
     }
+    
+    @Test
+    public void testCustomBackground() throws Exception {
+        // WHEN
+        final File subject = convertFile(new String[]{
+                "-w", "128",
+                "-h", "128",
+                "-f", svgPath("sample.svg"),
+                "--background-color", "0077ff",
+                "-o", tmpDir.getAbsolutePath()
+        });
+
+        // THEN
+        assertEqualImages("background-128x128-0077FF.png", subject.getAbsolutePath());
+    }
 
     private String svgPath(String file) throws URISyntaxException {
         return getClass().getResource("/svgfolder/" + file).toString();
     }
+    
+    private static void assertEqualImages(String source, String actual) {
+        BufferedImage expectedImage = ImageComparisonUtil.readImageFromResources(source);
+        BufferedImage actualImage = ImageComparisonUtil.readImageFromResources(actual);
+
+        // Create ImageComparison object and compare the images.
+        ImageComparisonResult imageComparisonResult = new ImageComparison(expectedImage, actualImage).compareImages();
+        
+        // Check the result
+        assertEquals("Expected " + source + " to be " + actual,
+                ImageComparisonState.MATCH, imageComparisonResult.getImageComparisonState());
+    }
 
     private static File convertFile(String[] args) throws Svg2PngException, URISyntaxException {
         List<File> files = Main.run(args);
-        //for (File file : files) file.deleteOnExit();
+        for (File file : files) file.deleteOnExit();
         assertEquals(1, files.size());
         return files.get(0);
     }
