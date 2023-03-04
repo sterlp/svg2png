@@ -1,6 +1,8 @@
 package org.sterl.svg2png;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import org.apache.batik.transcoder.TranscoderException;
@@ -8,6 +10,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;
@@ -22,7 +25,7 @@ public class Main {
         CliOptions.addOptions(options);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try {
             run(args);
         } catch (Svg2PngException e) {
@@ -79,7 +82,7 @@ public class Main {
         }
     }
 
-    private static void printHelp() {
+    private static void printHelp() throws IOException {
         System.out.println(StringUtils.repeat("=", 80));
         System.out.println(StringUtils.center("SVG to PNG", 80));
         System.out.println();
@@ -87,23 +90,9 @@ public class Main {
         System.out.println();
         System.out.println("Examples:");
         System.out.println("---------");
-        System.out.println("# just convert a file");
-        System.out.println("svg2png foo.svg");
-        System.out.println();
-        System.out.println("# generate a PNG with a custom name");
-        System.out.println("svg2png -f foo.svg -n bar.png");
-        System.out.println();
-        System.out.println("# convert all file in a directory");
-        System.out.println("svg2png -d /Pictures/icons/svg -o /Pictures/icons/png");
-        System.out.println();
-        System.out.println("# convert a directory with a JSON configuration");
-        System.out.println("svg2png -d . -c my.json");
-        System.out.println();
-        System.out.println("# convert SVG files using the default Android configuration");
-        System.out.println("svg2png -d . -o /dev/workset/android-project/app/src/main/res --android");
-        System.out.println();
-        System.out.println("# convert SVG to iOS icons with an orange background");
-        System.out.println("svg2png -f foo.svg -n bar -o icons --ios --no-alpha ffbd33");
+        System.out.println(IOUtils.toString(
+                Main.class.getResourceAsStream("/examples.txt"),
+                StandardCharsets.UTF_8));
     }
 
 }

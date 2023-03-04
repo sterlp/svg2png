@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class TestFileConfigParsing {
 
-    private ObjectMapper m = new ObjectMapper();
+    private final ObjectMapper m = new ObjectMapper();
 
     @Test
     public void testAndroid() throws Exception {
@@ -36,7 +36,6 @@ public class TestFileConfigParsing {
     
     @Test
     public void testAndroidIcon() throws Exception {
-        ObjectMapper m = new ObjectMapper();
         try (InputStream is = getClass().getResourceAsStream("/android-icon.json")) {
             OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
 
@@ -49,7 +48,6 @@ public class TestFileConfigParsing {
 
     @Test
     public void testIos() throws Exception {
-        ObjectMapper m = new ObjectMapper();
         try (InputStream is = getClass().getResourceAsStream("/ios.json")) {
             OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
 

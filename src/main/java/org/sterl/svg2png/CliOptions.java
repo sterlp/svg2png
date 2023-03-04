@@ -6,20 +6,19 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.sterl.svg2png.config.FileOutput;
 import org.sterl.svg2png.config.OutputConfig;
 import org.sterl.svg2png.util.FileUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public enum CliOptions {
-    FILE("f", null, true, "Source file to convert."),
-    FOLDER("d", null, true, "Source directory with one or more files to convert."),
-    OUTPUT("o", null, true, "Output directory where to put the file."),
-    NAME("n", null, true, "New name to use for all output files."),
-    WIDTH("w", null, true, "Width of the output file."),
-    HEIGHT("h", null, true, "Height of the output file."),
-    CONFIG("c", null, true, "JSON Config file for the file output."),
+    FILE("f", "file", true, "Source file to convert."),
+    FOLDER("d", "in-dir", true, "Source directory with one or more files to convert."),
+    OUTPUT("o", "out-dir", true, "Output directory where to put the file."),
+    NAME("n", "name", true, "New name to use for all output files."),
+    WIDTH("w", "width", true, "Width of the output file."),
+    HEIGHT("h", "height", true, "Height of the output file."),
+    CONFIG("c", "config", true, "JSON Config file for the file output."),
     ALLOW_EXTERNAL("e", "allow-external", false, "Allow external entities to be loaded by the SVG."),
     NO_ALPHA("a", "no-alpha", true, "Saves PNG without alpha channel and with specified background hex triplet. (Needed for iOS assets.)"),
     BACKGROUND_COLOR(null, "background-color", true, "Provide a custom background color to use for opaque image formats e.g. 0077FF."),

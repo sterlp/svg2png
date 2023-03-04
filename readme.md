@@ -34,94 +34,93 @@ Batik SVG Toolkit isn't supported by android because of the missing [Java2D API]
 | ---- | ----------- | --------- |
 | w    | Image width | **file**  |
 
+## CLI Usage
+
+```
+================================================================================
+                                   SVG to PNG                                   
+
+usage: svg2png
+ -a,--no-alpha <arg>           Saves PNG without alpha channel and with
+                               specified background hex triplet. (Needed
+                               for iOS assets.)
+    --android                  Android Icon 48dp mdpi 48x48 -> xxxhdpi
+                               192x192.
+    --android-24dp             Android 24dp icons, with suffix _24dp --
+                               mdpi 24x24 -> xxxhdpi 96x96.
+    --android-36dp             Android 36dp icons, with suffix _36dp --
+                               mdpi 36x36 -> xxxhdpi 144x144.
+    --android-48dp             Android 48dp icons, with suffix _48dp --
+                               mdpi 48x48 -> xxxhdpi 192x192.
+    --android-icon             Android Icon (Action Bar, Dialog etc.)
+                               config mdpi 36x36 -> xxxhdpi 128x128.
+    --android-launch           Android Launcher Icon config mdpi 48x48 ->
+                               xxxhdpi 192x192.
+    --android-small            Android Small default config from mdpi
+                               24x24 -> xxxhdpi 96x96.
+    --background-color <arg>   Provide a custom background color to use
+                               for opaque image formats e.g. 0077FF.
+ -c,--config <arg>             JSON Config file for the file output.
+ -d,--in-dir <arg>             Source directory with one or more files to
+                               convert.
+ -e,--allow-external           Allow external entities to be loaded by the
+                               SVG.
+ -f,--file <arg>               Source file to convert.
+ -h,--height <arg>             Height of the output file.
+    --ios                      iOS icons and Contents.json.
+ -n,--name <arg>               New name to use for all output files.
+ -o,--out-dir <arg>            Output directory where to put the file.
+    --transparent-white        This is a trick so that viewers which do
+                               not support the alpha channel will see a
+                               white background (and not a black one).
+ -w,--width <arg>              Width of the output file.
+```
+
 ## CLI Samples
 
 * use either **java -jar svg2png**
 * or download the executable jar and use **svg2png**
 
 ```Shell
-# just convert a file
-svg2png foo.svg
+# just convert one file, will create a foo.png as result
+java -jar svg2png.jar foo.svg
+
+# generate a PNG with a custom name
+java -jar svg2png.jar -f foo.svg -n bar.png
+
+# convert all files in a directory to a output directory
+java -jar svg2png.jar -d /Pictures/icons/svg -o /Pictures/icons/png
 
 # generate a 512x512 PNG
-./svg2png -w 512 -h 512 -f foo.svg
+java -jar svg2png.jar -w 512 -h 512 -f foo.svg
 
-# generate a PNG with a name
-svg2png -f foo.svg -n bar.png
-
-# Convert all *.svg files in the current directory to 24dp android png files (generates drawable-* directories)
-svg2png --android-small -d .
-
-# Convert 'my_picture.svg' using the android profile 48dp (generates drawable-* directories)
-svg2png --android -f my_picture.svg
-
-# Converts 'my-logo.svg' as android logo 48dp, using ic_launcher.png as name, generates into mipmap-* directories
-svg2png --android-launch -f my-logo.svg
-
-# convert all files in the directory '/Picures/icons/svg' and use '/Pictures/icons/png' as the output directory
-svg2png -d /Picures/icons/svg -o /Pictures/icons/png
-
-# convert with a JSON configuration
-svg2png -d . -c my.json
+# convert a directory with a JSON configuration
+java -jar svg2png.jar -d . -c my.json
 
 # convert SVG files using the default Android configuration
-svg2png -d . -o /dev/workset/android-project/app/src/main/res --android
+java -jar svg2png.jar -d . -o /dev/workset/android-project/app/src/main/res --android
 
-# you can always start it like any other java jar file
-java -jar svg2png
+# Convert all *.svg files in the current directory to 24dp android png files (generates drawable-* directories)
+java -jar svg2png.jar --android-small -d .
+
+# Convert 'my_picture.svg' using the android profile 48dp (generates drawable-* directories)
+java -jar svg2png.jar --android -f my_picture.svg
+
+# Converts 'my-logo.svg' as android logo 48dp, using ic_launcher.png as name, generates into mipmap-* directories
+java -jar svg2png.jar --android-launch -f my-logo.svg
+
+# convert all files in the directory '/Picures/icons/svg' and use '/Pictures/icons/png' as the output directory
+java -jar svg2png.jar -d /Picures/icons/svg -o /Pictures/icons/png
+
+# convert with a JSON configuration
+java -jar svg2png.jar -d . -c my.json
+
+# convert SVG to iOS icons with an orange background
+java -jar svg2png.jar -f foo.svg -n bar -o icons --ios --no-alpha ffbd33
+
+# select a custom background color
+java -jar svg2png.jar --background-color 6610f2 -f sample.svg
 ```
-
-## CLI Usage
-
-        ================================================================================
-                                   SVG to PNG                                   
-                                   
-        usage: svg2png
-            --android             Android Icon 48dp mdpi 48x48 -> xxxhdpi 192x192.
-            --android-24dp        Android 24dp icons, with suffix _24dp -- mdpi
-                                24x24 -> xxxhdpi 96x96.
-            --android-36dp        Android 36dp icons, with suffix _36dp -- mdpi
-                                36x36 -> xxxhdpi 144x144.
-            --android-48dp        Android 48dp icons, with suffix _48dp -- mdpi
-                                48x48 -> xxxhdpi 192x192.
-            --android-icon        Android Icon (Action Bar, Dialog etc.)  config
-                                mdpi 36x36 -> xxxhdpi 128x128.
-            --android-launch      Android Launcher Icon config mdpi 48x48 ->
-                                xxxhdpi 192x192.
-            --android-small       Android Small default config from mdpi 24x24 ->
-                                xxxhdpi 96x96.
-        -c <arg>                 JSON Config file for the file output.
-        -d <arg>                 Source directory with one or more files to
-                                convert.
-        -e,--allow-external      Allow external entities to be loaded by the SVG.
-        -f <arg>                 Source file to convert.
-        -h <arg>                 Height of the output file.
-        -n <arg>                 New name to use for all output files.
-        -o <arg>                 Output directory where to put the file.
-            --transparent-white   This is a trick so that viewers which do not
-                                support the alpha channel will see a white
-                                background (and not a black one).
-        -w <arg>                 Width of the output file.
-
-## Examples
-
-### just convert a file
-`svg2png foo.svg`
-
-### generate a PNG with a name
-`svg2png -f foo.svg -n bar.png`
-
-### convert all file in a directory
-svg2png -d /Picures/icons/svg -o /Pictures/icons/png
-
-### convert with a JSON configuration
-`svg2png -d . -c my.json`
-
-### convert SVG files using the default Android configuration
-`svg2png -d . -o /dev/workset/android-project/app/src/main/res --android`
-
-### convert SVG to iOS icons with an orange background
-`svg2png -f foo.svg -n bar -o icons --ios --no-alpha ffbd33`
 
 ### JSON Android Config Sample
 

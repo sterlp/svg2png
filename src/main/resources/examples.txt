@@ -1,0 +1,38 @@
+# just convert one file, will create a foo.png as result
+java -jar svg2png.jar foo.svg
+
+# generate a PNG with a custom name
+java -jar svg2png.jar -f foo.svg -n bar.png
+
+# convert all files in a directory to a output directory
+java -jar svg2png.jar -d /Pictures/icons/svg -o /Pictures/icons/png
+
+# generate a 512x512 PNG
+java -jar svg2png.jar -w 512 -h 512 -f foo.svg
+
+# convert a directory with a JSON configuration
+java -jar svg2png.jar -d . -c my.json
+
+# convert SVG files using the default Android configuration
+java -jar svg2png.jar -d . -o /dev/workset/android-project/app/src/main/res --android
+
+# Convert all *.svg files in the current directory to 24dp android png files (generates drawable-* directories)
+java -jar svg2png.jar --android-small -d .
+
+# Convert 'my_picture.svg' using the android profile 48dp (generates drawable-* directories)
+java -jar svg2png.jar --android -f my_picture.svg
+
+# Converts 'my-logo.svg' as android logo 48dp, using ic_launcher.png as name, generates into mipmap-* directories
+java -jar svg2png.jar --android-launch -f my-logo.svg
+
+# convert all files in the directory '/Picures/icons/svg' and use '/Pictures/icons/png' as the output directory
+java -jar svg2png.jar -d /Picures/icons/svg -o /Pictures/icons/png
+
+# convert with a JSON configuration
+java -jar svg2png.jar -d . -c my.json
+
+# convert SVG to iOS icons with an orange background
+java -jar svg2png.jar -f foo.svg -n bar -o icons --ios --no-alpha ffbd33
+
+# select a custom background color
+java -jar svg2png.jar --background-color 6610f2 -f sample.svg
