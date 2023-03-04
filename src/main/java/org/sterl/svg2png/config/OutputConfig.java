@@ -16,12 +16,7 @@ public class OutputConfig {
     private String inputFile;
     private String outputName;
     private String outputDirectory;
-    /**
-     * https://xmlgraphics.apache.org/batik/javadoc/org/apache/batik/transcoder/image/ImageTranscoder.html#KEY_FORCE_TRANSPARENT_WHITE
-     * PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE
-     */
     private boolean allowExternalResource = false;
-    private boolean forceTransparentWhite = false;
     private String noAlpha = null;
     private boolean contentsJson = false;
 
@@ -69,6 +64,12 @@ public class OutputConfig {
     public void applyBackgroundColor(String color) {
         for (FileOutput f : files) {
             f.setBackgroundColor(color);
+        }
+    }
+
+    public void enableForceTransparentWhite() {
+        for (FileOutput f : files) {
+            f.setForceTransparentWhite(true);
         }
     }
 }

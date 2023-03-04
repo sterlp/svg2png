@@ -64,9 +64,6 @@ public enum CliOptions {
         if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
             result.setAllowExternalResource(true);
         }
-        if (cmd.hasOption(FORCE_TRANSPARENT_WHITE.longName)) {
-            result.setForceTransparentWhite(true);
-        }
         if (cmd.hasOption(NO_ALPHA.longName)) {
             String bg = getValue(cmd, NO_ALPHA);
             validateColor(bg, "--" + NO_ALPHA.longName);
@@ -91,6 +88,10 @@ public enum CliOptions {
             String color = getValue(cmd, BACKGROUND_COLOR);
             validateColor(color, "--" + BACKGROUND_COLOR.longName);
             result.applyBackgroundColor(color);
+        }
+
+        if (cmd.hasOption(FORCE_TRANSPARENT_WHITE.longName)) {
+            result.enableForceTransparentWhite();
         }
 
         return result;

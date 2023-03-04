@@ -64,8 +64,6 @@ public class Svg2Png {
 
         // Disable XXE
         t.addTranscodingHint(SVGAbstractTranscoder.KEY_ALLOW_EXTERNAL_RESOURCES, cfg.isAllowExternalResource());
-        // https://github.com/sterlp/svg2png/issues/11
-        t.addTranscodingHint(ImageTranscoder.KEY_FORCE_TRANSPARENT_WHITE, cfg.isForceTransparentWhite());
 
 
         final List<File> generated = new ArrayList<>();
@@ -76,6 +74,8 @@ public class Svg2Png {
             info.setLength(0);
             info.append(StringUtils.rightPad(input.getName(), 12));
 
+            // https://github.com/sterlp/svg2png/issues/11
+            t.addTranscodingHint(ImageTranscoder.KEY_FORCE_TRANSPARENT_WHITE, out.isForceTransparentWhite());
             setSizeHint(SVGAbstractTranscoder.KEY_WIDTH, out.getWidth(), t, info);
             setSizeHint(SVGAbstractTranscoder.KEY_HEIGHT, out.getHeight(), t, info);
             if (out.hasBackgroundColor()) {            	

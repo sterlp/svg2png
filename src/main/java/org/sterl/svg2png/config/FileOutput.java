@@ -19,6 +19,11 @@ public class FileOutput {
     private String nameSuffix;
     private String namePrefix;
     private String backgroundColor = null;
+    /**
+     * https://xmlgraphics.apache.org/batik/javadoc/org/apache/batik/transcoder/image/ImageTranscoder.html#KEY_FORCE_TRANSPARENT_WHITE
+     * PNGTranscoder.KEY_FORCE_TRANSPARENT_WHITE
+     */
+    private boolean forceTransparentWhite = false;
 
     public File toOutputFile(File source, String basePath, String outName) {
         // either a set path or the one of the parent
