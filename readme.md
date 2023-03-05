@@ -31,10 +31,15 @@ Batik SVG Toolkit isn't supported by android because of the missing [Java2D API]
   > **file:** Can be set for each file individually, see json config, or for all using a cli option. The name can be used in the files.
 
 | CLI | CLI long | Name      | Level      | Description      |
-| --- | –------- | --------- | ---------- | ---------------- |
-| w   | width    |  width    |  **file**  | Image width      |
-| h   | height   |  height   |  **file**  | Image height     |
-|     | background-color   |  backgroundColor   |  **file**  | alternative color |
+| --- | -------- | --------- | ---------- | ---------------- |
+| w   | width    | width     | **file**   | Image width in pixel |
+| h   | height   | height    | **file**   | Image height in pixel |
+| n   | name     | name      | **file**   | Output name of the image |
+| o   | out-dir  | directory | **file**   | Output directory for this image |
+| | background-color   | backgroundColor    | **file**  | Provide a custom background color to use for opaque image formats e.g. 0077FF. |
+
+
+
 
 ## CLI Usage
 
