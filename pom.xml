@@ -52,7 +52,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
-        <batik.version>1.16</batik.version>
+        <batik.version>1.17</batik.version>
     </properties>
     <dependencies>
         <dependency>
