@@ -25,8 +25,6 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - uses: pmd/pmd-github-action@v1
-      with:
-        rulesets: 'ruleset.xml'
 
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
