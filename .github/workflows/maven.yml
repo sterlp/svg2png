@@ -26,9 +26,6 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Run PMD
-      run: mvn pmd:check
-
     - name: Report
       uses: dorny/test-reporter@v1
       if: always()
@@ -37,6 +34,9 @@ jobs:
         path: target/surefire-reports/*.xml
         reporter: java-junit
         fail-on-error: true
+
+    - name: Run PMD
+      run: mvn pmd:check
 
     - name: Update dependency graph
       uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
