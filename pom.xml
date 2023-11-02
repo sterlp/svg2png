@@ -21,6 +21,7 @@
 
     <scm>
         <url>https://github.com/sterlp/svg2png</url>
+        <connection>scm:git:git@github.com:sterlp/svg2png.git</connection>
     </scm>
 
     <licenses>
