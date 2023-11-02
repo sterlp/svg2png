@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.sterl.svg2png</groupId>
     <artifactId>svg2png</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.0-SNAPSHOT</version>
+    <version>1.2.0</version>
     <url>https://github.com/sterlp/svg2png</url>
 
     <inceptionYear>2015</inceptionYear>
@@ -22,7 +20,8 @@
     <scm>
         <url>https://github.com/sterlp/svg2png</url>
         <connection>scm:git:git@github.com:sterlp/svg2png.git</connection>
-    </scm>
+      <tag>svg2png-1.2.0</tag>
+  </scm>
 
     <licenses>
         <license>
