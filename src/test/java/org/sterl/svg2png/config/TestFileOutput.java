@@ -1,13 +1,13 @@
 package org.sterl.svg2png.config;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sterl.svg2png.util.FileUtil;
 
 public class TestFileOutput {

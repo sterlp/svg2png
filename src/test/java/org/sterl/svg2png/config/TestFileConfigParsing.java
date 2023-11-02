@@ -1,12 +1,14 @@
 package org.sterl.svg2png.config;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.InputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static org.junit.Assert.*;
 
 public class TestFileConfigParsing {
 
@@ -14,6 +16,7 @@ public class TestFileConfigParsing {
 
     @Test
     public void testAndroid() throws Exception {
+        System.err.println(getClass().getResourceAsStream("./android.json"));
         try (InputStream is = getClass().getResourceAsStream("/android.json")) {
             OutputConfig config = m.readerFor(OutputConfig.class).readValue(is);
             assertEquals(5, config.getFiles().size());

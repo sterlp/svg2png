@@ -1,17 +1,17 @@
 package org.sterl.svg2png;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.junit.Test;
-import org.sterl.svg2png.config.FileOutput;
-import org.sterl.svg2png.config.OutputConfig;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.junit.jupiter.api.Test;
+import org.sterl.svg2png.config.FileOutput;
+import org.sterl.svg2png.config.OutputConfig;
 
 public class CliOptionsTest {
 

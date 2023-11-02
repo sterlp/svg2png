@@ -1,10 +1,10 @@
 package org.sterl.svg2png;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.sterl.svg2png.AssertUtil.assertEndsWith;
 
 import java.awt.image.BufferedImage;
@@ -19,9 +19,9 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sterl.svg2png.config.OutputConfig;
 
 import com.github.romankh3.image.comparison.ImageComparison;
@@ -33,7 +33,7 @@ public class Svg2PngTest {
 
     static final File tmpDir = new File("./tmp1");
 
-    @Before
+    @BeforeEach
     public void before() throws IOException {
         tmpDir.mkdirs();
         tmpDir.deleteOnExit();
@@ -42,7 +42,7 @@ public class Svg2PngTest {
             file.delete();
         }
     }
-    @AfterClass
+    @AfterAll
     public static void after() throws Exception {
         clean();
     }
@@ -148,10 +148,10 @@ public class Svg2PngTest {
         convert.stream().forEach(f -> f.deleteOnExit());
 
         assertEquals(2, convert.size());
-        assertTrue("sample.png not found",
-                convert.stream().filter(f -> "sample.png".equals(f.getName())).findFirst().isPresent());
-        assertTrue("sample2.png not found",
-                convert.stream().filter(f -> "sample2.png".equals(f.getName())).findFirst().isPresent());
+        assertTrue(convert.stream().filter(f -> "sample.png".equals(f.getName())).findFirst().isPresent(),
+                "sample.png not found");
+        assertTrue(convert.stream().filter(f -> "sample2.png".equals(f.getName())).findFirst().isPresent(),
+                "sample2.png not found");
 
         convert.stream().forEach(f -> f.delete());
     }
@@ -231,11 +231,9 @@ public class Svg2PngTest {
                     "-o", tmpDir.getAbsolutePath()
             })
         );
-        Throwable exception = ex.getCause();
-        System.err.println(exception.getMessage());
-        assertEquals(
-            "The security settings do not allow any external resources to be referenced from the document",
-            exception.getMessage());
+        // THEN
+        assertTrue(ex.getMessage().contains("This is not allowed for security reasons and that resource will not be loaded"),
+                "'This is not allowed for security reasons and that resource will not be loaded'\n not found in:\n" + ex.getMessage());
     }
 
     @Test
@@ -257,7 +255,7 @@ public class Svg2PngTest {
 
         // THEN they should not be equal
         assertNotEquals(normal.hashCode(), white.hashCode());
-        assertTrue("white background file should be bigger", normal.length() < white.length());
+        assertTrue(normal.length() < white.length(), "white background file should be bigger");
     }
 
     @Test
@@ -283,7 +281,7 @@ public class Svg2PngTest {
 
         // THEN the file without alpha channel should be smaller
         assertNotEquals(normal.hashCode(), noAlpha.hashCode());
-        assertTrue("Removed alpha file should be smaller", normal.length() > noAlpha.length());
+        assertTrue(normal.length() > noAlpha.length(), "Removed alpha file should be smaller");
     }
 
     @Test
@@ -300,8 +298,8 @@ public class Svg2PngTest {
         
         // AND
         File contentJson = new File(tmpDir.getAbsolutePath() + "/Contents.json");
-        assertTrue("Content.json doesn't exists " + contentJson.getAbsolutePath(), 
-                contentJson.exists() && contentJson.isFile());
+        assertTrue(contentJson.exists() && contentJson.isFile(),
+                "Content.json doesn't exists " + contentJson.getAbsolutePath());
         
         String contentsJsonString = IOUtils.toString(new FileInputStream(contentJson), StandardCharsets.UTF_8);
         assertTrue(contentsJsonString.contains("sample-ios"));
@@ -367,8 +365,8 @@ public class Svg2PngTest {
         ImageComparisonResult imageComparisonResult = new ImageComparison(expectedImage, actualImage).compareImages();
         
         // Check the result
-        assertEquals("Expected " + source + " to be " + actual,
-                ImageComparisonState.MATCH, imageComparisonResult.getImageComparisonState());
+        assertEquals(ImageComparisonState.MATCH, imageComparisonResult.getImageComparisonState(),
+                "Expected " + source + " to be " + actual);
     }
 
     private static File convertFile(String[] args) throws Svg2PngException, URISyntaxException {
