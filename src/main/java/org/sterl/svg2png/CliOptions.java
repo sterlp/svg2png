@@ -39,7 +39,7 @@ public enum CliOptions {
     private final boolean hasArg;
     private final String description;
 
-    private CliOptions(String shortName, String longName, boolean hasArg, String description) {
+    CliOptions(String shortName, String longName, boolean hasArg, String description) {
         this.shortName = shortName;
         this.longName = longName;
         this.hasArg = hasArg;

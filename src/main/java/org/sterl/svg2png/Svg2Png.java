@@ -96,7 +96,9 @@ public class Svg2Png {
 
                 generated.add(outputFile);
                 String outF = outputFile.getCanonicalPath();
-                if (inputPath != null && inputPath.length() > 0) outF.replace(inputPath, "");
+                if (inputPath != null && inputPath.length() > 0) {
+                    outF = outF.replace(inputPath, "");
+                }
                 info.append("\t").append(outF);
             }
 
@@ -138,7 +140,10 @@ public class Svg2Png {
         return contents;
     }
 
-    private static void replaceAlphaBackground(byte[] inputBytes, File outputFile, final Color newBackground) throws java.io.IOException {
+    private static void replaceAlphaBackground(byte[] inputBytes, 
+            File outputFile, 
+            final Color newBackground) throws IOException {
+
         try (ByteArrayInputStream sourceStream = new ByteArrayInputStream(inputBytes)) {
             BufferedImage sourceImage = ImageIO.read(sourceStream);
 
@@ -154,7 +159,7 @@ public class Svg2Png {
 
             if (!ImageIO.write(destImage, "png", outputFile)) {
                 throw new RuntimeException("No image writer found in Graphics2D, cannot replace the background!");
-            };
+            }
         }
     }
 }
