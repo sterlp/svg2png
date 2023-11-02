@@ -20,6 +20,13 @@ Only platforms with a full Java JRE are supported like:
 
 Batik SVG Toolkit isn't supported by android because of the missing [Java2D API](https://stackoverflow.com/questions/7418937/how-to-integrate-batik-with-android-to-open-display-svg-files)
 
+## Tested Java distributions
+
+- zulu
+- graalvm
+
+> temurin version 8 failed in the ci/cd build. 
+
 ## Download & Requirements
 
 * [Download latest release version of svg2png](https://github.com/puel/svg2png/releases)
