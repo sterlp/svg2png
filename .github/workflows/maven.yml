@@ -24,7 +24,7 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
     - name: ls
-      run: ls -alt
+      run: ls target -alt
 
     - name: Archive code coverage results
       uses: actions/upload-artifact@v3
