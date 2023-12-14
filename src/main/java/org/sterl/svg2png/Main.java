@@ -10,6 +10,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sterl.svg2png.config.OutputConfig;
@@ -47,30 +48,12 @@ public class Main {
             if (null == args || args.length == 0) {
                 printHelp();
                 System.exit(0);
-            } else if (args.length == 1) {
-                cfg = OutputConfig.fromPath(args[0]);
-            } else {
-                CommandLine cmd = new DefaultParser().parse(options, args);
-                cfg = CliOptions.parse(cmd);
             }
-
-            // validation
-            if (!cfg.hasDirectoryOrFile()) {
-                throw new IllegalArgumentException("Please specify either a directory or a file to convert!");
-            } else if (cfg.getInputFile() != null) {
-                File f = FileUtil.newFile(cfg.getInputFile());
-                if (!f.exists()) throw new IllegalArgumentException("File '" + cfg.getInputFile() + "' not found!");
-                if (!f.isFile()) throw new IllegalArgumentException(cfg.getInputFile() + " is not a file!");
-            } else if (cfg.getInputDirectory() != null) {
-                File d = FileUtil.newFile(cfg.getInputDirectory());
-                if (!d.exists()) throw new IllegalArgumentException("Directory " + cfg.getInputDirectory() + " not found!");
-                if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputDirectory() + " is not a directory!");
-            }
-            if (cfg.getOutputDirectory() == null && cfg.getOutputName() != null) {
-                cfg.setOutputDirectory("./");
-            }
-
+            
+            cfg = buildOutputConfig(args);
+            
             return new Svg2Png(cfg).convert();
+            
         } catch (TranscoderException e) {
             final Exception ex = e.getException();
             if (ex.getMessage().contains("do not allow any external resources")) {
@@ -80,6 +63,33 @@ public class Main {
         } catch (Exception e) {
             throw new Svg2PngException(e, cfg);
         }
+    }
+
+    static OutputConfig buildOutputConfig(String[] args) throws ParseException {
+        OutputConfig cfg;
+        if (args.length == 1) {
+            cfg = OutputConfig.fromPath(args[0]);
+        } else {
+            CommandLine cmd = new DefaultParser().parse(options, args);
+            cfg = CliOptions.parse(cmd);
+        }
+
+        // validation
+        if (!cfg.hasDirectoryOrFile()) {
+            throw new IllegalArgumentException("Please specify either a directory or a file to convert!");
+        } else if (cfg.getInputFile() != null) {
+            File f = FileUtil.newFile(cfg.getInputFile());
+            if (!f.exists()) throw new IllegalArgumentException("File '" + cfg.getInputFile() + "' not found!");
+            if (!f.isFile()) throw new IllegalArgumentException(cfg.getInputFile() + " is not a file!");
+        } else if (cfg.getInputDirectory() != null) {
+            File d = FileUtil.newFile(cfg.getInputDirectory());
+            if (!d.exists()) throw new IllegalArgumentException("Directory " + cfg.getInputDirectory() + " not found!");
+            if (!d.isDirectory()) throw new IllegalArgumentException(cfg.getInputDirectory() + " is not a directory!");
+        }
+        if (cfg.getOutputDirectory() == null && cfg.getOutputName() != null) {
+            cfg.setOutputDirectory("./");
+        }
+        return cfg;
     }
 
     private static void printHelp() throws IOException {

@@ -5,22 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.sterl.svg2png.AssertUtil.assertEndsWith;
+import static org.sterl.svg2png.TestUtil.assertEndsWith;
+import static org.sterl.svg2png.TestUtil.svgPath;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.sterl.svg2png.config.OutputConfig;
 
@@ -29,40 +24,11 @@ import com.github.romankh3.image.comparison.ImageComparisonUtil;
 import com.github.romankh3.image.comparison.model.ImageComparisonResult;
 import com.github.romankh3.image.comparison.model.ImageComparisonState;
 
-public class Svg2PngTest {
-
-    static final File tmpDir = new File("./tmp1");
-
-    @BeforeEach
-    public void before() throws IOException {
-        tmpDir.mkdirs();
-        tmpDir.deleteOnExit();
-        Collection<File> files = FileUtils.listFiles(tmpDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-        for (File file : files) {
-            file.delete();
-        }
-    }
-    @AfterAll
-    public static void after() throws Exception {
-        clean();
-    }
-    private static void clean() {
-        try {
-            FileUtils.deleteDirectory(tmpDir);
-        } catch (Exception e) {
-            System.err.println("TEST: Failed to clean " + tmpDir + " -> " + e.getCause().getMessage());
-            Collection<File> files = FileUtils.listFiles(tmpDir, TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
-            for (File file : files) {
-                file.delete();
-                file.deleteOnExit();
-            }
-            tmpDir.deleteOnExit();
-        }
-    }
+public class Svg2PngTest extends AbstractFileTest {
 
     @Test
     public void testConversionOfOneFile() throws Exception {
-    	// GIVEN
+        // GIVEN
         OutputConfig cfg = OutputConfig.fromPath(svgPath("sample.svg"));
         cfg.applyOutputSize(128, 128);
 
@@ -353,10 +319,6 @@ public class Svg2PngTest {
         assertEqualImages("background-128x128-0077FF.png", subject.getAbsolutePath());
     }
 
-    private String svgPath(String file) throws URISyntaxException {
-        return getClass().getResource("/svgfolder/" + file).toString();
-    }
-    
     private static void assertEqualImages(String source, String actual) {
         BufferedImage expectedImage = ImageComparisonUtil.readImageFromResources(source);
         BufferedImage actualImage = ImageComparisonUtil.readImageFromResources(actual);

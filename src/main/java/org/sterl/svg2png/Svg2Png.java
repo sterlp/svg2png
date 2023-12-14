@@ -76,9 +76,15 @@ public class Svg2Png {
 
             // https://github.com/sterlp/svg2png/issues/11
             t.addTranscodingHint(ImageTranscoder.KEY_FORCE_TRANSPARENT_WHITE, out.isForceTransparentWhite());
-            setSizeHint(SVGAbstractTranscoder.KEY_WIDTH, out.getWidth(), t, info);
-            setSizeHint(SVGAbstractTranscoder.KEY_HEIGHT, out.getHeight(), t, info);
-            if (out.hasBackgroundColor()) {            	
+            if (out.getWidth() > 0) {
+                setSizeHint(SVGAbstractTranscoder.KEY_WIDTH, out.getWidth(), t, info);
+                info.append(out.getWidth() +"w ");
+            }
+            if (out.getHeight() > 0) {
+                setSizeHint(SVGAbstractTranscoder.KEY_HEIGHT, out.getHeight(), t, info);
+                info.append(out.getHeight() +"h ");
+            }
+            if (out.hasBackgroundColor()) {
                 t.addTranscodingHint(PNGTranscoder.KEY_BACKGROUND_COLOR, Color.decode("#" + out.getBackgroundColor()));
             }
 

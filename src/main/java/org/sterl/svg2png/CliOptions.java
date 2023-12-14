@@ -60,7 +60,6 @@ public enum CliOptions {
     public static OutputConfig parse(CommandLine cmd) {
         OutputConfig result = selectPredefinedJsonConfig(cmd);
         
-        
         if (cmd.hasOption(ALLOW_EXTERNAL.longName)) {
             result.setAllowExternalResource(true);
         }
@@ -93,7 +92,6 @@ public enum CliOptions {
         if (cmd.hasOption(FORCE_TRANSPARENT_WHITE.longName)) {
             result.enableForceTransparentWhite();
         }
-
         return result;
     }
 

@@ -44,10 +44,14 @@ public class OutputConfig {
         return inputFile != null || inputDirectory != null;
     }
 
+    /**
+     * @param width -1 will be ignored
+     * @param height -1 will be ignored
+     */
     public void applyOutputSize(int width, int height) {
         for (FileOutput fileOutput : files) {
-            fileOutput.setWidth(width);
-            fileOutput.setHeight(height);
+            if (width > -1) fileOutput.setWidth(width);
+            if (height > -1) fileOutput.setHeight(height);
         }
     }
 

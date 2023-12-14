@@ -1,7 +1,7 @@
 package org.sterl.svg2png.config;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.sterl.svg2png.AssertUtil.assertEndsWith;
+import static org.sterl.svg2png.TestUtil.assertEndsWith;
 
 import java.io.File;
 import java.nio.file.Files;
