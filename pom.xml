@@ -7,7 +7,7 @@
     <groupId>org.sterl.svg2png</groupId>
     <artifactId>svg2png</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.2-SNAPSHOT</version>
+    <version>1.3.0-SNAPSHOT</version>
     <url>https://github.com/sterlp/svg2png</url>
 
     <inceptionYear>2015</inceptionYear>
@@ -55,7 +55,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
+        <java.version>11</java.version>
         <batik.version>1.17</batik.version>
     </properties>
 
