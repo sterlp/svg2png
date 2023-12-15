@@ -5,14 +5,13 @@ on:
 
 jobs:
   build:
-    environment: release
     runs-on: ubuntu-latest
     steps:
       - name: Import GPG key
         id: import_gpg
         uses: crazy-max/ghaction-import-gpg@v3
         with:
-          gpg-private-key: ${{ secrets.PPG_KEY }}
+          gpg_private_key: ${{ secrets.PPG_KEY }}
           passphrase: ${{ secrets.PGP_PASSPHRASE }}
       - name: Checkout code
         uses: actions/checkout@master # don't get confused by @master - it is the version of the checkout action. You repo will be checked out with ${{ github.ref }}
