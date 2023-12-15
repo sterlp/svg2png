@@ -78,11 +78,9 @@ public class Svg2Png {
             t.addTranscodingHint(ImageTranscoder.KEY_FORCE_TRANSPARENT_WHITE, out.isForceTransparentWhite());
             if (out.getWidth() > 0) {
                 setSizeHint(SVGAbstractTranscoder.KEY_WIDTH, out.getWidth(), t, info);
-                info.append(out.getWidth() +"w ");
             }
             if (out.getHeight() > 0) {
                 setSizeHint(SVGAbstractTranscoder.KEY_HEIGHT, out.getHeight(), t, info);
-                info.append(out.getHeight() +"h ");
             }
             if (out.hasBackgroundColor()) {
                 t.addTranscodingHint(PNGTranscoder.KEY_BACKGROUND_COLOR, Color.decode("#" + out.getBackgroundColor()));
