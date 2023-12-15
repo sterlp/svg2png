@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Import GPG key
         id: import_gpg
-        uses: crazy-max/ghaction-import-gpg@v3
+        uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.PPG_KEY }}
           passphrase: ${{ secrets.PGP_PASSPHRASE }}
