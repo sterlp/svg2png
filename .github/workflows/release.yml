@@ -7,13 +7,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Configure GPG Key
-        run: |
-          echo -n "$PPG_KEY" | base64 --decode | gpg --import
-        env:
-            PPG_KEY: ${{ secrets.PGP_KEY }}
-      - name: Checkout code
-        uses: actions/checkout@master # don't get confused by @master - it is the version of the checkout action. You repo will be checked out with ${{ github.ref }}
+      -
+        name: Checkout
+        uses: actions/checkout@v4
+      -
+        name: Import GPG key
+        uses: crazy-max/ghaction-import-gpg@v6
+        with:
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PGP_PASSPHRASE }}
+      -
+        name: List keys
+        run: gpg -K
+
       - name: Build site and deploy maven registry
         env:
           GPG_KEYNAME: ${{ secrets.PGP_KEYNAME }}
