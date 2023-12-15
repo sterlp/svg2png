@@ -30,6 +30,7 @@ Batik SVG Toolkit isn't supported by android because of the missing [Java2D API]
 ## Download & Requirements
 
 * [Download latest release version of svg2png](https://github.com/puel/svg2png/releases)
+  * [Or from maven](https://central.sonatype.com/artifact/org.sterl.svg2png/svg2png)
 * You have to have Java 8 installed on your PC
 * Sidenote: [Google Android Icons](https://www.google.com/design/icons/)
 
