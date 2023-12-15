@@ -1,0 +1,64 @@
+{
+    "files": [
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_16x16",
+            "height": 16,
+            "width": 16
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_16x16@2x",
+            "height": 32,
+            "width": 38
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_32x32",
+            "height": 32,
+            "width": 32
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_32x32@2x",
+            "height": 64,
+            "width": 64
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_128x128",
+            "height": 128,
+            "width": 128
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_128x128@2x",
+            "height": 256,
+            "width": 256
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_256x256",
+            "height": 256,
+            "width": 256
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_256x256@2x",
+            "height": 512,
+            "width": 512
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_512x512",
+            "height": 512,
+            "width": 512
+        },
+        {
+            "directory": "icon.iconset",
+            "nameSuffix": "_512x512@2x",
+            "height": 1024,
+            "width": 1024
+        }
+    ]
+}
