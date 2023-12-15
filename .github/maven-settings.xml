@@ -12,8 +12,8 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <gpg.keyname>${env.BAOPSO_GPG_46948F68_KEYNAME}</gpg.keyname>
-                <gpg.passphrase>${env.BAOPSO_GPG_46948F68_PASSPHRASE}</gpg.passphrase>
+                <gpg.keyname>${env.GPG_KEYNAME}</gpg.keyname>
+                <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
             </properties>
         </profile>
     </profiles>
