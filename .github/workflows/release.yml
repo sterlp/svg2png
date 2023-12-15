@@ -11,7 +11,7 @@ jobs:
         run: |
           echo -n "$PPG_KEY" | base64 --decode | gpg --import
         env:
-            PPG_KEY: ${{ secrets.PPG_KEY }}
+            PPG_KEY: ${{ secrets.PGP_KEY }}
       - name: Checkout code
         uses: actions/checkout@master # don't get confused by @master - it is the version of the checkout action. You repo will be checked out with ${{ github.ref }}
       - name: Build site and deploy maven registry
