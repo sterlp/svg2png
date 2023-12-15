@@ -1,0 +1,20 @@
+<settings>
+    <servers>
+        <server>
+            <id>ossrh</id>
+            <username>${env.OSSRH_USER_TOKEN}</username>
+            <password>${env.OSSRH_PWD_TOKEN}</password>
+        </server>
+    </servers>
+    <profiles>
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.keyname>${env.BAOPSO_GPG_46948F68_KEYNAME}</gpg.keyname>
+                <gpg.passphrase>${env.BAOPSO_GPG_46948F68_PASSPHRASE}</gpg.passphrase>
+            </properties>
+        </profile>
+    </profiles>
+</settings>

@@ -1,0 +1,26 @@
+name: RELEASE
+
+on:
+  push:
+    branches:
+      - "**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.BAOPSO_GPG_46948F68_PRIVATE }}
+          passphrase: ${{ secrets.BAOPSO_GPG_46948F68_PASSPHRASE }}
+      - name: Checkout code
+        uses: actions/checkout@master # don't get confused by @master - it is the version of the checkout action. You repo will be checked out with ${{ github.ref }}
+      - name: Build site and deploy maven registry
+        env:
+          BAOPSO_GPG_46948F68_KEYNAME: ${{ secrets.BAOPSO_GPG_46948F68_KEYNAME }}
+          BAOPSO_GPG_46948F68_PASSPHRASE: ${{ secrets.BAOPSO_GPG_46948F68_PASSPHRASE }}
+          OSSRH_PWD_TOKEN: ${{ secrets.OSSRH_PWD_TOKEN }}
+          OSSRH_USER_TOKEN: ${{ secrets.OSSRH_USER_TOKEN }}
+        run: mvn -V -B --no-transfer-progress --settings .github/maven-settings.xml -P release clean deploy
