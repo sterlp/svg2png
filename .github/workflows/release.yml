@@ -5,6 +5,7 @@ on:
 
 jobs:
   build:
+    environment: release
     runs-on: ubuntu-latest
     steps:
       - name: Import GPG key
