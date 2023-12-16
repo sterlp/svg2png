@@ -179,8 +179,9 @@ public enum CliOptions {
                 throw new RuntimeException(e);
             }
         } else if (cmd.hasOption(IOS_ICONS.longName)) {
-            if (!cmd.hasOption(NAME.shortName))
+            if (!cmd.hasOption(NAME.shortName)) {
                 throw new RuntimeException("-n name must be specified when --ios is used.");
+            }
 
             try {
                 result = m.readerFor(OutputConfig.class).readValue(CliOptions.class.getResourceAsStream("/ios.json"));
