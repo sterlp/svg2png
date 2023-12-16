@@ -3,6 +3,7 @@
 ![Java CI with Maven](https://github.com/sterlp/svg2png/workflows/Java%20CI%20with%20Maven/badge.svg?branch=master)
 [![huntr](https://cdn.huntr.dev/huntr_security_badge_mono.svg)](https://huntr.dev)
 [![CodeQL](https://github.com/sterlp/svg2png/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sterlp/svg2png/actions/workflows/codeql-analysis.yml)
+[![Maven](https://img.shields.io/maven-central/v/org.sterl.svg2png/svg2png)](https://central.sonatype.com/artifact/org.sterl.svg2png/svg2png)
 
 ## Goal
 Manage your Icons in SVG and generate the needed PNG into your projects as needed. No "Web Service" needed, just an executable JAR file. This library is based on [batik](https://xmlgraphics.apache.org/batik/)
