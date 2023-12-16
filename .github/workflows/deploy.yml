@@ -1,4 +1,4 @@
-name: RELEASE
+name: r
 
 on:
   workflow_dispatch:
