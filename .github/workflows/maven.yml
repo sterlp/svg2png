@@ -20,7 +20,6 @@ jobs:
         with:
           java-version: 11
           distribution: "zulu"
-          cache: maven
 
       - name: Build with Maven
         run: mvn -B install --file pom.xml
@@ -61,7 +60,6 @@ jobs:
         with:
           java-version: 11
           distribution: "zulu"
-          cache: maven
 
       - name: Build and deploy maven registry
         env:
