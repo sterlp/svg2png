@@ -1,7 +1,8 @@
-name: r
+name: deploy tags
 
 on:
-  workflow_dispatch:
+  push:
+    tags: ['v*.*.*']
 
 jobs:
   build:
@@ -16,9 +17,6 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PGP_PASSPHRASE }}
-      -
-        name: List keys
-        run: gpg -K
 
       - name: Build site and deploy maven registry
         env:
