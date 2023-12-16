@@ -26,7 +26,10 @@ Batik SVG Toolkit isn't supported by android because of the missing [Java2D API]
 - zulu
 - graalvm
 
-> temurin version 8 failed in the ci/cd build. 
+> temurin version 11 failed in the ci/cd build. 
+
+- 1.2.x => JDK 8
+- 1.3.x => JDK 11
 
 ## Download & Requirements
 

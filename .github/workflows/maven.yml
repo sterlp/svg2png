@@ -4,9 +4,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [master]
+    branches: [master, jdk8-version]
   pull_request:
-    branches: [master]
+    branches: [master, jdk8-version]
 
 jobs:
   build:
@@ -15,22 +15,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 1.8
+      - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
-          java-version: 8
+          java-version: 11
           distribution: "zulu"
-          cache: maven
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B install --file pom.xml
 
       - name: Report Junit
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Test results
-          path: target/surefire-reports/*.xml
+          path: "**/**/surefire-reports/*.xml"
           reporter: java-junit
           fail-on-error: true
 
@@ -43,26 +42,24 @@ jobs:
           path: "target/pmd.xml"
           title: PMD Result
 
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v4
+
       - name: Import GPG key
         uses: crazy-max/ghaction-import-gpg@v6
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           passphrase: ${{ secrets.PGP_PASSPHRASE }}
-      - name: Set up JDK 1.8
+
+      - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
-          java-version: 8
+          java-version: 11
           distribution: "zulu"
-          cache: maven
 
       - name: Build and deploy maven registry
         env:
