@@ -1,7 +1,8 @@
-name: oss_release
+name: deploy tags
 
 on:
-  workflow_dispatch:
+  push:
+    tags: ["v*.*.*"]
 
 jobs:
   build:
