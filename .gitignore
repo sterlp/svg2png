@@ -1,10 +1,10 @@
-/target/
+target/
 .settings
 .classpath
 .project
 
 .factorypath
 
-/tmp1/
-/sample.png
-/sample2.png
+tmp1/
+sample.png
+sample2.png
