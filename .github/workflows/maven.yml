@@ -47,7 +47,7 @@ jobs:
       - name: Report PMD
         uses: jwgmeligmeyling/pmd-github-action@master
         with:
-          path: "target/pmd.xml"
+          path: "**/target/pmd.xml"
           title: PMD Result
 
   deploy:
